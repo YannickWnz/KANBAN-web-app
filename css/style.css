@@ -1,0 +1,849 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+:root {
+    /* COLORS */
+    --main-purple: #635FC7;
+    --light-purple: #A8A4FF;
+    --black: #000112;
+    --veryDarkGrey: #20212C;
+    --darkGrey: #2B2C37;
+    --lines: #3E3F4E;
+    --mediumGrey: #828FA3;
+    --red: #EA5555;
+    --lightRed: #FF9898;
+    --green: #67E2AE;
+    --blue: #49C4E5;
+
+    /* TYPOGRAPHY */
+    --heading-S: 12px;
+    --heading-M: 15px;
+    --heading-L: 18px;
+    --heading-XL: 24px;
+}
+
+body {
+    background-color: var(--veryDarkGrey);
+}
+
+.app-body-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space;
+    justify-content: flex-end;
+}
+
+.body-container {
+    width: calc(100% - 300px);
+    height: 100vh;
+    transition: .5s ease-in-out;
+    overflow-y: auto;
+}
+
+.body-container .wrapper {
+    width: 100%;
+    height: inherit;
+    /* border: 2px solid blue; */
+    display: flex;
+    justify-content: space-between;
+}
+
+/* sidebar content custom style START */
+
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background-color: var(--darkGrey);
+    border-right: 1px solid var(--lines);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-between;
+    /* padding: 20px; */
+    transition: .5s ease-in-out;
+    z-index: 3;
+    /* border: 4px solid orangered; */
+}
+
+.hidebar {
+    transform: translateX(-400px);
+    /* left: -400px; */
+    transition: .5s ease-in-out;
+}
+
+.extend-board-width {
+    transition: .5s ease-in-out;
+    width: 100% !important;
+}
+
+
+.side-logo-container {
+    /* border: 1px solid white; */
+    padding: 20px;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.boards-section {
+    /* width: 100%; */
+    /* border: 3px solid lawngreen; */
+    /* position: fixed; */
+    /* top: 50%; */
+    /* transform: translateY(-100px); */
+    /* transform: translate(0, -60%); */
+    height: 450px;
+    /* overflow-y: scroll; */
+}
+
+.boards-section h1 {
+    font-size: var(--heading-S);
+    color: var(--mediumGrey);
+    font-weight: 400;
+    /* line-height: 2; */
+    letter-spacing: 2px;
+    padding: 0 0 20px 20px;
+}
+
+.created-boards {
+    /* border: 1px solid white; */
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+.created-boards::-webkit-scrollbar {
+    display: none;
+}
+
+.board-item {
+    padding: 10px 0 10px 20px;
+    width: 260px;
+    border-radius: 0 30px 30px 0;
+    color: whitesmoke;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.board-item i {
+    margin-right: 10px;
+}
+.board-item span {
+    font-size: var(--heading-M);
+}
+
+.active-board {
+    background-color: var(--main-purple);
+    z-index: 9999 !important;
+}
+
+.created-boards .board-item:hover:not(.active-board) {
+    background-color: whitesmoke;
+    color: var(--main-purple);
+    z-index: 1;
+}
+
+
+.createBoardBtn {
+    color: var(--main-purple);
+    font-size: var(--heading-M);
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 0 0 20px;
+    margin-top: 10px;
+}
+
+.createBoardBtn i:nth-child(1) {
+    margin-right: 10px
+}
+
+.createBoardBtn i:nth-child(2) {
+    font-size: .8em;
+    margin-right: 3px;
+}
+
+/* side bottom contents CSS START  */
+.sidebar-bottom-contents {
+    /* border: 1px solid white; */
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+
+.mode-switch {
+    width: 100%;
+    height: 30px;
+    background-color: var(--veryDarkGrey);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: black; */
+    /* border: 1px solid white; */
+}
+
+.mode-switch i {
+    /* color: whitesmoke; */
+    color: var(--mediumGrey);
+}
+
+.sidebar-bottom-contents p {
+    /* color: white; */
+    color: var(--mediumGrey);
+    font-size: var(--heading-S);
+    cursor: pointer;
+}
+
+
+.sidebar-bottom-contents p i {
+    margin-right: 10px;
+    color: var(--mediumGrey);
+}
+
+/* toggle switch CSS START */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 16px;
+    /* border: 1px solid white; */
+    margin: 0 10px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    /* background-color: red; */
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 11px;
+    width: 11px;
+    left: 0px;
+    bottom: 3px;
+    /* background-color: white; */
+    background-color: red;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* toggle switch CSS END */
+
+/* side bottom contents CSS END */
+
+
+
+
+
+/* sidebar content custom style END */
+
+
+
+/* board content custom style START */
+.showSidebarBtn {
+    width: 50px;
+    height: 45px;
+    position: absolute;
+    left: 0;
+    bottom: 50px;
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 30px 30px 0;
+    background-color: var(--main-purple);
+    cursor: pointer;
+    z-index: 2;
+}
+
+.showSidebarBtn:hover {
+    background-color: var(--light-purple);
+}
+
+.showSidebarBtn i {
+    color: white;
+}
+
+.board {
+    /* width: calc(100% - 100px); */
+    width: 100%;
+    height: 100vh;
+}
+
+.board-nav {
+    width: 100%;
+    height: 80px;
+    background-color: var(--darkGrey);
+    border-bottom: 1px solid var(--lines);
+    display: flex;
+    justify-content: space-between;
+    /* border: 3px solid white; */
+}
+
+.logo-container {
+    width: 200px;
+    /* border: 1px solid white; */
+    border-right: 1px solid var(--lines);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* display: none; */
+}
+
+.toggleLogoDisplay {
+    display: none;
+}
+
+.logo-container img {
+    object-fit: cover;
+}
+
+.nav-contents {
+    /* width: calc(100% - 300px); */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-contents h1 {
+    color: whitesmoke;
+}
+
+.newTaskBtnWrapper {
+    width: 180px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    /* border: 3px solid limegreen; */
+    /* position: relative; */
+}
+
+.newTaskBtnWrapper button {
+    padding: 12px 15px;
+    color: white;
+    border: none;
+    font-size: var(--heading-S);
+    font-weight: bold;
+    background-color: var(--main-purple);
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.newTaskBtnWrapper button:disabled {
+    background-color: #312e78;
+    color: rgb(186, 182, 182);
+    pointer-events: none;
+}
+
+.newTaskBtnWrapper button i {
+    font-size: var(--heading-S);
+}
+
+.newTaskBtnWrapper i.fa-ellipsis-vertical {
+    color: whitesmoke;
+    cursor: pointer;
+}
+
+/* amend board box CSS START */
+.amend-board-box {
+    width: 200px;
+    height: 80px;
+    background-color: var(--darkGrey);
+    /* background-color: lightblue; */
+    background-color: var(--veryDarkGrey);
+    border: 1px solid var(--lines);
+    position: absolute;
+    top: 70px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding: 20px;
+    animation: animateAmendBoardBox .3s;
+    /* display: none; */
+}
+
+.amend-board-box a:nth-child(1) {
+    color: var(--mediumGrey);
+    cursor: pointer;
+    font-size: var(--heading-S);
+    margin-bottom: 5px;
+}
+
+.amend-board-box a:nth-child(2) {
+    color: var(--red);
+    cursor: pointer;
+    font-size: var(--heading-S);
+    margin-top: 5px;
+}
+
+@keyframes animateAmendBoardBox{
+    0%{
+      transform: translateY(15px);
+    }
+    100%{
+      transform: translateY(0px);
+    }
+  }
+/* amend board box CSS END */
+
+/* empty board content CSS START */
+
+.empty-board-content {
+    width: 100%;
+    height: calc(100% - 80px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    display: none;
+    /* border: 2px solid white; */
+}
+
+.empty-board-content p {
+    /* font-weight: bold; */
+    font-size: var(--heading-L);
+    color: var(--mediumGrey);
+}
+
+.empty-board-content button {
+    padding: 12px 15px;
+    color: white;
+    border: none;
+    font-size: var(--heading-S);
+    font-weight: bold;
+    background-color: var(--main-purple);
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 20px 0;
+    /* border: 1px solid white; */
+}
+
+.empty-board-content button:hover {
+    background-color: var(--light-purple);
+}
+
+/* empty board content CSS END */
+
+
+/* Add New Board Form CSS START */
+.addNewBoard {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.683);
+    z-index: 4;
+    display: none;
+}
+
+#addBoardForm {
+    width: 450px;
+    min-height: 200px;
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    padding: 20px;
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    display: none;
+}
+
+#addBoardForm p,
+.add-task-form p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#addBoardForm label,
+.add-task-form label {
+    font-size: var(--heading-S);
+    font-weight: bold;
+}
+
+#addBoardForm p,
+#addBoardForm label,
+.add-task-form p,
+.add-task-form label {
+    color: white;
+}
+
+#addBoardForm .boardErrorMsg {
+    /* border: 1px solid red; */
+    text-align: center;
+    /* font-weight: 100 !important; */
+    margin-top: 15px;
+    color: crimson ;
+    display: none;
+}
+
+#addBoardForm input[type=text]
+{
+    width: 100%;
+    padding: 7px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid var(--lines);
+    background: transparent;
+    outline: none;
+    color: white;
+}
+
+#addBoardForm input[type=submit]
+{
+    width: 100%;
+    padding: 8px;
+    border-radius: 30px;
+    color: white;
+    background-color: var(--main-purple);
+    border: none;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: pointer;
+} 
+
+
+
+/* Add New Board Form CSS END */
+
+/* filled board content CSS START */
+
+/* testing filled board start*/
+.filled-board {
+    width: 100%;
+    height: calc(100% - 80px);
+    overflow-y: auto;
+    display: none;
+}
+
+.filled-board-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    /* display: none; */
+    justify-content: space-around;
+}
+
+.active-filled-board {
+    display: flex;
+}
+
+/* testing filled board start*/
+
+
+.filled-board-wrapper > div {
+    width: calc(100% / 5);
+    height: 100%;
+    padding: 20px 0;
+}
+
+.column-task-wrapper {
+    /* border: 1px solid white; */
+}
+
+
+.todo .column-color {
+    background-color: var(--blue);
+}
+
+.doing .column-color {
+    background-color: var(--main-purple);
+}
+
+.done .column-color {
+    background-color: var(--green);
+}
+
+.onhold .column-color {
+    background-color: var(--red);
+}
+
+.column-name {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: var(--mediumGrey);
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.column-name span:nth-child(2),
+.column-name span:nth-child(3)
+{
+    font-size: var(--heading-S);
+    letter-spacing: 2px;
+}
+
+.column-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--blue);
+    margin-right: 10px;
+}
+
+.task-number {
+    margin-left: 10px;
+}
+
+/* column task CSS START */
+.column-task {
+    width: 100%;
+    min-height: 90px;
+    background-color: var(--darkGrey);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.column-task:hover p:nth-child(1) {
+    color: var(--main-purple);
+}
+
+.column-task p:nth-child(1) {
+    color: white;
+    font-weight: bold;
+    font-size: var(--heading-M);
+    margin-bottom: 10px;
+}
+
+.column-task p:nth-child(2) {
+    color: var(--mediumGrey);
+    font-size: var(--heading-S);
+}
+/* column task CSS END */
+
+/* filled board content CSS END */
+
+/* add new task section CSS START */
+
+.add-task-bg-overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.683);
+    z-index: 4;
+    display: none;
+}
+
+.add-task-form {
+    width: 450px;
+    min-height: 500px;
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    padding: 20px;
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    display: none;
+}
+
+.new-task-name {
+    /* border: 2px solid red; */
+    position: relative;
+}
+
+.new-task-name input {
+    margin: 10px 0;
+    /* border: 1px solid var(--red); */
+}
+
+.newTaskEmptyError {
+    color: var(--red);
+    font-size: .8em;
+    position: absolute;
+    right: 6px;
+    bottom: 20px;
+    display: none;
+}
+
+.add-task-form textarea {
+    width: 100%;
+    padding: 7px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid var(--lines);
+    background: transparent;
+    outline: none;
+    color: white;
+    resize: none;
+}
+
+.add-task-form input[type=text] {
+    width: 100%;
+    padding: 7px 15px;
+    /* margin: 0px 0 0px 0; */
+    border-radius: 5px;
+    border: 1px solid var(--lines);
+    background: transparent;
+    outline: none;
+    color: white;
+    /* border: 1px solid var(--red); */
+}
+
+.add-task-form input[type=submit] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 30px;
+    color: white;
+    background-color: var(--main-purple);
+    border: none;
+    /* font-weight: bold; */
+    margin-top: 10px;
+    cursor: pointer;
+    /* border: 2px solid red; */
+    /* margin: 0; */
+}
+
+.substask-input-wrapper {
+    width: 100%;
+    /* border: 1px solid white; */
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.substask-input-wrapper .newTaskEmptyError {
+    color: var(--red);
+    font-size: .8em;
+    position: absolute;
+    right: 50px;
+    bottom: 10px;
+    display: none;
+}
+
+.substask-input-wrapper i {
+    margin: 0 15px;
+    color: var(--mediumGrey);
+    font-size: 1.4em;
+    cursor: pointer;
+    /* color: var(--red); */
+}
+
+.add-substasks-btn {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border: none;
+    background-color: white;
+    /* background-color: rgba(0, 0, 0, 0.596); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    cursor: pointer;
+    color: var(--main-purple);
+}
+
+.add-substasks-btn i {
+    font-size: .6em;
+    margin: 3px 3px 0 0;
+}
+
+
+.add-substasks-btn span {
+    font-size: var(--heading-M);
+}
+
+.status-options {
+    width: 100%;
+    /* border: 1px solid white; */
+}
+
+.status-options select {
+    width: 100%;
+    padding: 7px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid var(--lines);
+    background: transparent;
+    outline: none;
+    color: white;
+}
+
+.display-none {
+    display: none;
+}
+
+
+/* add new task section CSS END */
+
+
+/* board content custom style END */
+
+
+
