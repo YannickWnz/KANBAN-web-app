@@ -497,7 +497,7 @@ let todoTaskColumnWrapper = document.querySelector('.todo .column-task-wrapper')
 let doingTaskColumnWrapper = document.querySelector('.doing .column-task-wrapper');
 let doneTaskColumnWrapper = document.querySelector('.done .column-task-wrapper');
 let onHoldTaskColumnWrapper = document.querySelector('.onhold .column-task-wrapper');
-console.log(onHoldTaskColumnWrapper);
+// console.log(onHoldTaskColumnWrapper);
 
 // fetch task data based on board id SCRIPTS START
 function fetchTaskData(index) {
@@ -513,16 +513,49 @@ function fetchTaskData(index) {
             // console.log(results[data.selectedBoardIndex].boardID);
             
             let xhr = new XMLHttpRequest();
+
             xhr.open('GET', './include/fetchtaskdata.inc.php?bid='+boardId, true);
+
             xhr.onload = function() {
                 let taskData = JSON.parse(xhr.responseText);
-                console.log(taskData);
-                // let sub = taskData[0].substasks;
-                // console.log(JSON.stringify(sub));
+                
+                let todoOutput = '';
+                let doingOutput = '';
+
+                taskData.forEach((task, index) => {
+                    let status = task.taskStatus.toLowerCase();
+
+                    let substask = JSON.parse(taskData[index].substasks);
+                    let subLength = substask.length;
+
+                    switch (status) {
+                        case 'todo':
+                            console.log()
+                            todoOutput += `
+                                <div class="column-task">
+                                    <p>${task.taskTitle}</p>
+                                    <p>0 of ${subLength} substasks</p>
+                                </div>
+                            `
+                            break;
+                        case 'doing':
+                            doingOutput += `
+                                <div class="column-task">
+                                    <p>${task.taskTitle}</p>
+                                    <p>0 of ${subLength} substasks</p>
+                                </div>
+                            `
+                            break;
+                    }
+
+                    todoTaskColumnWrapper.innerHTML = todoOutput;
+                    doingTaskColumnWrapper.innerHTML = doingOutput;
+                })
+
+
             }
+
             xhr.send();
-
-
         }
     }
     xhr.send();
