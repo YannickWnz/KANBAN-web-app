@@ -492,12 +492,17 @@ function insertNewTask(data) {
 }
 // insert task function END
 
-// get column containes
+// get column containers
 let todoTaskColumnWrapper = document.querySelector('.todo .column-task-wrapper');
 let doingTaskColumnWrapper = document.querySelector('.doing .column-task-wrapper');
 let doneTaskColumnWrapper = document.querySelector('.done .column-task-wrapper');
 let onHoldTaskColumnWrapper = document.querySelector('.onhold .column-task-wrapper');
-// console.log(onHoldTaskColumnWrapper);
+
+// get task number container 
+let todoTaskNumberWrapper = document.querySelector('.todo .task-number');
+let doingTaskNumberWrapper = document.querySelector('.doing .task-number');
+let doneTaskNumberWrapper = document.querySelector('.done .task-number');
+let onHoldTaskNumberWrapper = document.querySelector('.onhold .task-number');
 
 // fetch task data based on board id SCRIPTS START
 function fetchTaskData(index) {
@@ -513,8 +518,16 @@ function fetchTaskData(index) {
             // console.log(results[data.selectedBoardIndex].boardID);
             
             let xhr = new XMLHttpRequest();
+            let xhr2 = new XMLHttpRequest();
+            let xhr3 = new XMLHttpRequest();
+            let xhr4 = new XMLHttpRequest();
+            let xhr5 = new XMLHttpRequest();
 
             xhr.open('GET', './include/fetchtaskdata.inc.php?bid='+boardId, true);
+            xhr2.open('GET', './include/fetchtodotaskscount.inc.php?bid='+boardId, true);
+            xhr3.open('GET', './include/fetchdoingtaskscount.inc.php?bid='+boardId, true);
+            xhr4.open('GET', './include/fetchdonetaskscount.inc.php?bid='+boardId, true);
+            xhr5.open('GET', './include/fetchonholdtaskscount.inc.php?bid='+boardId, true);
 
             xhr.onload = function() {
                 let taskData = JSON.parse(xhr.responseText);
@@ -527,10 +540,11 @@ function fetchTaskData(index) {
 
                     let substask = JSON.parse(taskData[index].substasks);
                     let subLength = substask.length;
+                    let stat = taskData[index].taskStatus;
+                    // console.log(stat);
 
                     switch (status) {
                         case 'todo':
-                            console.log()
                             todoOutput += `
                                 <div class="column-task">
                                     <p>${task.taskTitle}</p>
@@ -555,7 +569,35 @@ function fetchTaskData(index) {
 
             }
 
+            xhr2.onload = function() {
+                let fetchedTodoTaskNumber = JSON.parse(xhr2.responseText);
+                let todoTaskNo = fetchedTodoTaskNumber[0].todo_task_number;
+                todoTaskNumberWrapper.innerHTML = `(${todoTaskNo})`
+            }
+
+            xhr3.onload = function() {
+                let fetchedDoingTaskNumber = JSON.parse(xhr3.responseText);
+                let doingTaskNo = fetchedDoingTaskNumber[0].doing_task_number;
+                doingTaskNumberWrapper.innerHTML = `(${doingTaskNo})`
+            }
+
+            xhr4.onload = function() {
+                let fetchedDoneTaskNumber = JSON.parse(xhr4.responseText);
+                let doneTaskNo = fetchedDoneTaskNumber[0].done_task_number;
+                doneTaskNumberWrapper.innerHTML = `(${doneTaskNo})`
+            }
+
+            xhr5.onload = function() {
+                let fetchedOnHoldTaskNumber = JSON.parse(xhr5.responseText);
+                let onHoldTaskNo = fetchedOnHoldTaskNumber[0].onhold_task_number;
+                onHoldTaskNumberWrapper.innerHTML = `(${onHoldTaskNo})`
+            }
+
             xhr.send();
+            xhr2.send();
+            xhr3.send();
+            xhr4.send();
+            xhr5.send();
         }
     }
     xhr.send();
