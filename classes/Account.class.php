@@ -33,19 +33,41 @@ class Account {
 
         $query = $this->con->prepare('SELECT * FROM task WHERE boardID = :boardID');
         $query->bindValue(':boardID', $boardID);
-
         $query->execute();
-
-        // $results = $query->fetchAll();
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-
-        $sub = json_decode($result['substasks'], true);
-        return $sub;
-        // $decoded = json_decode($results);
-        // return json_encode($results);
-
-
+        $results = $query->fetchAll();
+        return json_encode($results);
     }
 
+    public function fetchNumberOfTodoTask($boardID) {
+        $query = $this->con->prepare('SELECT COUNT(*) AS todo_task_number FROM task WHERE taskStatus = "todo" AND boardID = :id');
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+
+    public function fetchNumberOfDoingTask($boardID) {
+        $query = $this->con->prepare('SELECT COUNT(*) AS doing_task_number FROM task WHERE taskStatus = "doing" AND boardID = :id');
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+
+    public function fetchNumberOfDoneTask($boardID) {
+        $query = $this->con->prepare('SELECT COUNT(*) AS done_task_number FROM task WHERE taskStatus = "done" AND boardID = :id');
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+    
+    public function fetchNumberOfOnHoldTask($boardID) {
+        $query = $this->con->prepare('SELECT COUNT(*) AS onhold_task_number FROM task WHERE taskStatus = "on-hold" AND boardID = :id');
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
 
 }
