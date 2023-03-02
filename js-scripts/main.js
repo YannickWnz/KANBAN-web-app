@@ -203,10 +203,6 @@ function handleActiveBoard() {
                 if(getActiveBoard) {getActiveBoard.classList.remove('active-board')}
                 content.classList.add('active-board');
                 // testing(index)
-                // let getActiveContent = document.querySelector('.active-filled-board');
-                // if(getActiveContent) {getActiveContent.classList.remove('active-filled-board')}
-                // filledBoardWrapper[index].classList.add('active-filled-board');
-                
                 
                 // function enabling add new task button in header once a board is clicked
                 enableHeaderBtn();
@@ -241,8 +237,6 @@ const addNewSubstask = (callback) => {
     const substaskItems = document.querySelectorAll('.substask-input-wrapper');
     const substasksContainer = document.querySelector('.new-task-substasks');
     const substasksIcons = document.querySelectorAll('.substask-input-wrapper i')
-
-    // console.log(substaskItems);
 
     // generate random placeholder
     function shuffle(array) {
@@ -406,7 +400,7 @@ function removeSubstasksError() {
 
 // function handling the removal of error message from each substask once user starts typing END
 
-
+// get task elements value and send it to function that handles insertion of new task in the database
 function collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus, substask1, substask2, substask3) {
 
     // set substask 2 to null if not specified
@@ -414,12 +408,12 @@ function collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus
         substask2 = '';
     }
 
-    // set substask 2 to null if not specified
+    // set substask 3 to null if not specified
     if(substask3 == undefined) {
         substask3 = '';
     }
 
-    // get index of selected board
+    // get all boards
     let boards = document.querySelectorAll('.board-item');
 
     // create empty variable that will contain the selected board index
@@ -517,10 +511,19 @@ function fetchTaskData(index) {
             // console.log(boardId);
             // console.log(results[data.selectedBoardIndex].boardID);
             
+            // http request to fetch task data
             let xhr = new XMLHttpRequest();
+
+            // http request to fetch number of todo task in column
             let xhr2 = new XMLHttpRequest();
+
+            // http request to fetch number of doing task in column
             let xhr3 = new XMLHttpRequest();
+
+            // http request to fetch number of done task in column
             let xhr4 = new XMLHttpRequest();
+
+            // http request to fetch number of on-hold task in column
             let xhr5 = new XMLHttpRequest();
 
             xhr.open('GET', './include/fetchtaskdata.inc.php?bid='+boardId, true);
@@ -565,6 +568,10 @@ function fetchTaskData(index) {
                     todoTaskColumnWrapper.innerHTML = todoOutput;
                     doingTaskColumnWrapper.innerHTML = doingOutput;
                 })
+                
+                let todotasks = document.querySelectorAll('.todo .column-task-wrapper > div');
+                displayTaskInfoOnClick(todotasks);
+                // displayTaskInfoOnClick(taskData);
 
 
             }
@@ -599,8 +606,46 @@ function fetchTaskData(index) {
             xhr4.send();
             xhr5.send();
         }
+
     }
     xhr.send();
+
 }
-// fetchTaskData();
+
 // fetch task data based on board id SCRIPTS END
+
+
+const displayTaskInfoOnClick = (task) => {
+let data = Array.from(task);
+
+    for (let i = 0; i < data.length; i++) {
+        function clicked() {
+            console.log(data[i], i);
+            // let req = new XMLHttpRequest();
+            // req.open('GET', './getboardname.class.php', true);
+            // req.onload = () => {
+            //     if(this.status === 200) {
+            //         // let fetcheddata = JSON.parse(req.responseText);
+            //         // taskdata = data[i]
+            //         // console.log(fetcheddata)
+            //         console.log(req.responseText)
+            //     }
+            // }
+            // req.send();
+            // console.log('yup')
+            // console.log(data[i].querySelector('p:nth-child(1)'))
+        }
+        data[i].addEventListener('click', clicked);
+    }
+
+    // data.forEach(el => {
+    //     console.log(el)
+    //     el.addEventListener('click', () => console.log(el));
+    // })
+
+    // console.log(task)
+    
+    // console.log(data)
+
+}
+
