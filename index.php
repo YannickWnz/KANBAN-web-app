@@ -83,7 +83,7 @@ if(!isset($_SESSION['visited'])) {
           <div class="empty-board-content"></div>
           <!-- empty board content END -->
 
-          <!-- add new board model pop up START -->
+          <!-- add new board modal pop up START -->
           <div class="addNewBoard"></div>
           <form id="addBoardForm" method="POST" onsubmit="return handleNewBoard()">
           <!-- <form method="" action="" id="addBoardForm"> -->
@@ -97,7 +97,7 @@ if(!isset($_SESSION['visited'])) {
             </div>
             <p class="boardErrorMsg">Board Name can't be empty</p>
           </form>
-          <!-- add new board model pop up START -->
+          <!-- add new board modal pop up START -->
           
           <!-- filled board with columns task START -->
           <div class="filled-board">
@@ -198,6 +198,38 @@ if(!isset($_SESSION['visited'])) {
           </form>
           <!-- add new task END -->
 
+          <!-- view task START -->
+          <div class="view-task-bg-overlay display-none"></div>
+          <div class="view-task-modal display-none">
+            <!-- <div class="view-task-title">
+              <h3>Research pricing points of various competitors and trial of different business models</h3>
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+              <div class="amend-view-task display-none">
+                <a>Edit task</a>
+                <a>Delete task</a>
+              </div>
+            </div>
+            <div class="view-task-description">
+              <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur corrupti voluptatibus praesentium nihil, pariatur nesciunt iure error voluptatum. Unde quod ullam omnis exercitationem enim placeat? Eaque consequatur dolorem distinctio non?</p>
+            </div>
+            <div class="view-task-subtasks">
+              <h5>Subtasks (0 of 3)</h5>
+                <div class="subtask-checkbox-wrapper">
+                  <input type="checkbox" name="" id="">
+                  <p>Research competitor pricing busines models</p>
+                </div>
+                <div class="subtask-checkbox-wrapper">
+                  <input type="checkbox" name="" id="">
+                  <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur odio sint incidunt eaque cumque sequi.</p>
+                </div>
+                <div class="subtask-checkbox-wrapper">
+                  <input type="checkbox" name="" id="">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio modi fugiat atque quisquam unde molestiae. Ipsam id omnis eaque possimus.</p>
+                </div>
+            </div> -->
+          </div>
+          <!-- view task END -->
+
         </div>
       </div>
     </div>
@@ -206,6 +238,7 @@ if(!isset($_SESSION['visited'])) {
 
 
   <!-- <script src="./js-scripts/scripts.js"></script> -->
+  <!-- <script src="./js-scripts/main-test.js"></script> -->
   <script src="./js-scripts/main.js"></script>
 
 </body>
