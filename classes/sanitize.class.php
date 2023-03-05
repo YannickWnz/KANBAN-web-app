@@ -25,7 +25,8 @@ class Sanitize {
 
     public static function sanitizeStatus($input) {
         $input = htmlspecialchars($input);
-        $input = ucfirst($input);
+        // $input = ucfirst($input);
+        $input = strtolower($input);
         return $input;
     }
 
