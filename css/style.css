@@ -835,9 +835,138 @@ input:checked+.slider:before {
     color: white;
 }
 
+.view-task-bg-overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.683);
+    z-index: 4;
+    /* display: none; */
+}
+
+.view-task-modal {
+    width: 450px;
+    min-height: 200px;
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    padding: 30px;
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    /* display: none; */
+}
+
+.view-task-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.amend-view-task {
+    width: 180px;
+    height: 80px;
+    background-color: var(--veryDarkGrey);
+    border: 1px solid var(--lines);
+    position: absolute;
+    top: 60px;
+    right: -100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding: 20px;
+    animation: animateAmendBoardBox .3s;
+}
+
+.amend-view-task a:nth-child(1) {
+    color: var(--mediumGrey);
+    cursor: pointer;
+    font-size: var(--heading-S);
+    margin-bottom: 5px;
+}
+
+.amend-view-task a:nth-child(2) {
+    color: var(--red);
+    cursor: pointer;
+    font-size: var(--heading-S);
+    margin-top: 5px;
+}
+
+
+
+.view-task-title h3 {
+    max-width: 85%;
+}
+
+.view-task-title i {
+    font-size: 1.5em;
+    cursor: pointer;
+    color: var(--mediumGrey);
+}
+
+.view-task-description p {
+    color: var(--mediumGrey);
+    font-size: .9em;
+    line-height: 1.7;
+}
+
+.view-task-subtasks {
+    color: white;
+    margin-top: 20px;
+}
+
+.view-task-subtasks h5 {
+    margin-bottom: 20px;
+}
+
+.subtask-checkbox-wrapper {
+    /* border: 1px solid white; */
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: var(--veryDarkGrey);
+}
+
+.subtask-checkbox-wrapper input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.subtask-checkbox-wrapper p {
+    font-size: .8em;
+}
+
+.subtask-checked {
+    text-decoration: line-through;
+    color: var(--mediumGrey);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 .display-none {
     display: none;
 }
+
 
 
 /* add new task section CSS END */
