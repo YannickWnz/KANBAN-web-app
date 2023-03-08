@@ -32,10 +32,22 @@ class Sanitize {
 
     public static function sanitizeId($id) {
         $id = str_replace( array( '\'', '"', ',', ';', '<', '>', '*', '`', '=', '?', '!', '-', '.' ), ' ', $id);
-        if(strlen($id) > 5) {
-            $id = substr($id, 0, 5);
+        // $id = FILTER_SANITIZE_NUMBER_INT($id);
+        // $id = FILTER_SANITIZE_NUMBER_INT($id);
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        if(strlen($id) > 11) {
+            $id = substr($id, 0, 11);
         }
         return $id;
+    }
+
+    public static function sanitizeArrayInput($arrayInput) {
+
+        foreach($arrayInput as $key => $value) {
+            $result[$key] = htmlspecialchars($value);
+            return $result;
+        }
+
     }
 
 
