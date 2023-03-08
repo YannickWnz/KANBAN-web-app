@@ -10,7 +10,7 @@ if(isset($_GET['bid'])) {
     $boardId = $_GET['bid'];
 }
 
-echo $insert->fetchTaskBasedOnBoard($boardId);
+echo $insert->fetchTasksDataUsingBoardID($boardId);
 
 // echo $boardID;
 
