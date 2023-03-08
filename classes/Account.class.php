@@ -18,21 +18,40 @@ class Account {
     }
 
     // insert task details into task table
-    public function insertTask($boardId, $taskTitle, $taskDescription, $json, $taskStatus) {
-        $query = $this->con->prepare('INSERT INTO task (taskTitle, taskDescription, substasks, taskStatus, boardID) VALUES (:title, :desc, :json, :status, :id)');
+    public function insertTask($boardId, $taskTitle, $taskDescription, $json, $completeSubJson, $taskStatus) {
+        $query = $this->con->prepare('INSERT INTO task (taskTitle, taskDescription, substasks, completedSubtasks, taskStatus, boardID) VALUES (:title, :desc, :json, :compSub, :status, :id)');
         $query->bindValue(':title', $taskTitle);
         $query->bindValue(':desc', $taskDescription);
         $query->bindValue(':json', $json);
+        $query->bindValue(':compSub', $completeSubJson);
         $query->bindValue(':status', $taskStatus);
         $query->bindValue(':id', $boardId);
 
         $query->execute();
     }
 
-    public function fetchTaskBasedOnBoard($boardID) {
+    // public function insertTasks($boardId, $taskTitle, $taskDescription, $taskStatus, $taskUniqID) {
+    //     $query = $this->con->prepare('INSERT INTO tasks (taskTitle, taskDescription, taskStatus, taskUniqID, boardID) VALUES (:title, :desc, :status, :uniq, :id)');
+    //     $query->bindValue(':title', $taskTitle);
+    //     $query->bindValue(':desc', $taskDescription);
+    //     $query->bindValue(':status', $taskStatus);
+    //     $query->bindValue(':uniq', $taskUniqID);
+    //     $query->bindValue(':id', $boardId);
+    //     $query->execute();
+    // }
 
+    public function fetchTasksDataUsingBoardID($boardID) {
         $query = $this->con->prepare('SELECT * FROM task WHERE boardID = :boardID');
+        // $query = $this->con->prepare('SELECT taskTitle, taskStatus, subtaskContent FROM tasks t, subtasks s WHERE t.boardID = :boardID AND s.boardID = :boardID AND t.taskUniqID = s.taskUniqID; ');
         $query->bindValue(':boardID', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+
+    public function fetchSubtask($taskID) {
+        $query = $this->con->prepare('SELECT completedSubtasks FROM task WHERE taskID = :taskID');
+        $query->bindValue(':taskID', $taskID);
         $query->execute();
         $results = $query->fetchAll();
         return json_encode($results);
@@ -63,11 +82,35 @@ class Account {
     }
     
     public function fetchNumberOfOnHoldTask($boardID) {
-        $query = $this->con->prepare('SELECT COUNT(*) AS onhold_task_number FROM task WHERE taskStatus = "on-hold" AND boardID = :id');
+        $query = $this->con->prepare('SELECT COUNT(*) AS onhold_task_number FROM tasks WHERE taskStatus = "on-hold" AND boardID = :id');
         $query->bindValue(':id', $boardID);
         $query->execute();
         $results = $query->fetchAll();
         return json_encode($results);
     }
+
+    public function fetchTodoTasks($boardID) {
+        $query = $this->con->prepare('SELECT * FROM task WHERE taskStatus = :status AND boardID = :id');
+        $query->bindValue(':status', "todo");
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+
+    }
+
+    public function updateCompletedSubtasks($taskID, $completedSubtasks) {
+        $query = $this->con->prepare('UPDATE task SET completedSubtasks = :completedSubtasks WHERE taskID = :taskID');
+        $query->bindValue(':completedSubtasks', $completedSubtasks);
+        $query->bindValue(':taskID', $taskID);
+        $query->execute();
+
+        if($query) {
+            echo "Subtasks updated successfully";
+        }
+
+    }
+
+
 
 }
