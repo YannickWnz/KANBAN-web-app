@@ -20,9 +20,11 @@ CREATE TABLE `task` (
     `taskTitle` VARCHAR(255) NOT NULL,
     `taskDescription` VARCHAR(255) NOT NULL,
     `substasks` JSON,
+    `completedSubtasks` JSON,
     `taskStatus` VARCHAR(10) NOT NULL,
     `boardID` INT,
     FOREIGN KEY (`boardID`) REFERENCES `board`(`boardID`)
 );
 
--- CREATE TASK TABLE
+
+-- ALTER TABLE task ADD COLUMN completedSubtasks JSON AFTER substasks;
