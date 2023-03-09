@@ -99,6 +99,15 @@ class Account {
 
     }
 
+    public function fetchDoingTasksData($boardID) {
+        $query = $this->con->prepare('SELECT * FROM task WHERE taskStatus = :status AND boardID = :id');
+        $query->bindValue(':status', "doing");
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+
     public function updateCompletedSubtasks($taskID, $completedSubtasks) {
         $query = $this->con->prepare('UPDATE task SET completedSubtasks = :completedSubtasks WHERE taskID = :taskID');
         $query->bindValue(':completedSubtasks', $completedSubtasks);
