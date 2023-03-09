@@ -99,12 +99,15 @@ const handleNewBoard = () => {
         emptyBoardError.style.display = 'none';
     }
 
+    // make post request to add new board
     let xhr = new XMLHttpRequest();
     xhr.open('POST', './include/insertboard.inc.php', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     xhr.onload = () => {
-        console.log(xhr.responseText);
+        // console.log(xhr.responseText);
+
+        // call get board function to display boards and number of total board on load
         getBoard();
         getBoardNumber();
     }
@@ -153,35 +156,18 @@ function getBoard() {
 }
 getBoard();
 
-// test START
-function testing(index) {
-    let tryI = '';
-    // console.log(index)
-    let xhr = new XMLHttpRequest();
-    // xhr.open('GET', './getdata.php', true);
-    xhr.open('GET', './getboardname.class.php', true);
-    xhr.onload = function() {
-        if(this.status == 200) {
-            let results = JSON.parse(this.responseText);
-            console.log(results[index].boardID);
-            // tryI = results[index].boardID;
-        }
-    }
-    // console.log(tryI);
-    xhr.send();
-
-}
-// test END
-
+// get board number container from DOM
 let boardNo = document.querySelector('.boards-section h1 span');
 
 const getBoardNumber = () => {
 
+    // request to fetch boards total number
     let xhr = new XMLHttpRequest();
     xhr.open('GET', './getboardnumber.php', true);
     xhr.onload = function() {
         if(this.status == 200) {
             let results = JSON.parse(this.responseText);
+            // updating DOM with fetched total boards number
             boardNo.innerHTML = `(${results[0].boardNo})`;
         }
     }
@@ -226,8 +212,6 @@ function displayFilledBoard() {
     filledBoard.style.display = 'block';
 }
 // display filled board when a board is selected SCRIPTS END
-
-
 
 
 // handle adding new substasks scripts
@@ -278,7 +262,7 @@ const addNewSubstask = (callback) => {
     callback();
 }
 
-// scripts to delete substasks
+// function handling subtasks deletion except the first one
 function deleteSubstask() {
     const substasksIcons = document.querySelectorAll('.substask-input-wrapper i')
     const substaskItems = document.querySelectorAll('.substask-input-wrapper');
@@ -316,8 +300,8 @@ const newTaskValue = () => {
     let substaskErrorMessage = document.querySelectorAll('.substask-input-wrapper .newTaskEmptyError');
     const taskStatus = document.querySelector('#task-status').value;
     
+    // turn collected subtasks into an array
     newTaskSubstasksWrapper = Array.from(newTaskSubstasks);
-    // console.log(newTaskSubstasksWrapper);
 
     // get title input value
     let newTaskTitleValue = newTaskTitle.value;
@@ -356,28 +340,28 @@ const newTaskValue = () => {
 
     // newTaskForm.reset();
 
-    // run function handling the removal of error messages once user start typing in subtask input
+    // run function handling the removal of error messages from subtask input on keyup event
     removeSubstasksError();
     return false;
 }
-// Function handling add new task form and its inputs once it's been submitted START
+// Function handling add new task form and its inputs once it's been submitted END
 
 
-// remove red border and error message when user start typing in title input START
+// remove red border and error message from title input on keyup event START
 
 let newTaskTitle = document.querySelector('.new-task-name input');
 let taskTitleError = document.querySelector('.new-task-name .newTaskEmptyError');
 let taskIcon = document.querySelector('.substask-input-wrapper i');
-// const newTaskSubstasks = document.querySelectorAll('.new-task-substasks .substask-input-wrapper input');
 
 function removeTitleErrorMsg() {
     newTaskTitle.style.border = '1px solid var(--lines)';
     taskTitleError.style.display = 'none';
 }
-// remove error message when user start typing
+
+// call function handling the removal of error msg from title input on keyup event  
 newTaskTitle.addEventListener('keyup', removeTitleErrorMsg);
 
-// remove red border and error message when user start typing in title input END
+// remove red border and error message from title input on keyup event END
 
 
 
@@ -396,7 +380,6 @@ function removeSubstasksError() {
             substask.addEventListener('keyup', removeEachSubstaskError)
     })
 }
-// removeSubstasksError();
 
 // function handling the removal of error message from each substask once user starts typing END
 
@@ -413,13 +396,13 @@ function collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus
         substask3 = '';
     }
 
-    // get all boards
+    // get all boards from DOM
     let boards = document.querySelectorAll('.board-item');
 
     // create empty variable that will contain the selected board index
     let selectedBoardIndex = '';
 
-    // loop through all boards and get the one with active board class
+    // cycle through all boards and get the one with active board class
     boards.forEach((board, index) => {
         if(board.classList.contains('active-board')) {
             selectedBoardIndex = index;
@@ -443,7 +426,7 @@ function collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus
 
 // insert task function START
 function insertNewTask(data) {
-    // fetch boardId from database using board index
+    // ajax request to fetch boardId from database using board index
     let xhr = new XMLHttpRequest();
     xhr.open('GET', './getboardname.class.php', true);
     xhr.onload = function() {
@@ -453,18 +436,21 @@ function insertNewTask(data) {
             // console.log(results[data.selectedBoardIndex].boardID);
             
             // post data to php file START
+            // once the boardID is fetched, a post request is made to the server to insert all tasks data in the task table. boardID will be used as a foreign key in the task table
             let xhr = new XMLHttpRequest();
 
             xhr.open('POST', './include/inserttask.inc.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             xhr.onload = () => {
-                // console.log(xhr.responseText);
-                let errorMsgFromInsertTaskFile = xhr.responseText;
-                console.log(errorMsgFromInsertTaskFile);
+                // log response message in console if there is any
+                console.log(xhr.responseText);
+
+                // call fetchTaskData function after post request with board index to automatically update the DOM with the new data
                 fetchTaskData(data.selectedBoardIndex)
             }
 
+            // create object to store tasks elements value
             const newTaskData = {
                 taskTitle: data.newTaskTitleValue,
                 taskDescription: data.taskDescriptionValue,
@@ -475,11 +461,11 @@ function insertNewTask(data) {
                 boardId: boardId
             }
 
+            // convert created object to a json string and send it to the server
             const jsonData = JSON.stringify(newTaskData);
             xhr.send(jsonData);
 
             // post data to php file END
-
         }
     }
     xhr.send();
@@ -498,6 +484,19 @@ let doingTaskNumberWrapper = document.querySelector('.doing .task-number');
 let doneTaskNumberWrapper = document.querySelector('.done .task-number');
 let onHoldTaskNumberWrapper = document.querySelector('.onhold .task-number');
 
+// function handling the return completed subtasks length function START
+function returnCompletedSubtaskLength(completedSubtasks) {
+    let completedSubtasksLength = completedSubtasks.filter(sub => {
+        if(sub == 'true') {
+            return true
+        }
+        return false
+    }).length; 
+
+    return completedSubtasksLength
+}
+// function handling the return completed subtasks length function END
+
 // fetch task data based on board id SCRIPTS START
 function fetchTaskData(index) {
 
@@ -508,11 +507,8 @@ function fetchTaskData(index) {
         if(this.status == 200) {
             let results = JSON.parse(this.responseText);
             let boardId = results[index].boardID;
-            // console.log(boardId);
-            // console.log(results[data.selectedBoardIndex].boardID);
             
             // http request to fetch task data
-            // let xhr = new XMLHttpRequest();
             let xml = new XMLHttpRequest();
 
             // http request to fetch number of todo task in column
@@ -533,76 +529,62 @@ function fetchTaskData(index) {
             xhr4.open('GET', './include/fetchdonetaskscount.inc.php?bid='+boardId, true);
             xhr5.open('GET', './include/fetchonholdtaskscount.inc.php?bid='+boardId, true);
 
-
-    // let todoOutput = '';
-    // let doingOutput = '';
-
             xml.onload = function() {
-                if(this.status === 200) {
-                let taskData = JSON.parse(this.responseText);
-                
-                let todoOutput = '';
-                let doingOutput = '';
-                taskData.forEach((task, index) => {
-                    let status = task.taskStatus.toLowerCase();
-                    // console.log(task.length)
+                    if(this.status === 200) {
+                    let taskData = JSON.parse(this.responseText);
+                    
+                    // empty output that will be used to update 'todo' column
+                    let todoOutput = '';
+                    // empty output that will be used to update 'doing' column
+                    let doingOutput = '';
+                    // empty output that will be used to update 'done' column
+                    let doneOutput = '';
+                    // empty output that will be used to update 'on-hold' column
+                    let onHoldOutput = '';
 
-                    // get subtask and parse it into js object
-                    let substask = JSON.parse(taskData[index].substasks);
+                    taskData.forEach((task, index) => {
+                        let status = task.taskStatus.toLowerCase();
 
-                    // get subtask length
-                    let subLength = substask.length;
+                        // get subtask and parse it into js object
+                        let substask = JSON.parse(taskData[index].substasks);
 
-                    // get completed subtask array and parse it into js object
-                    let completedSubtasks = JSON.parse(taskData[index].completedSubtasks);
-                    // completedSubtasks.forEach(sub => console.log(sub))
+                        // get subtask length
+                        let subLength = substask.length;
 
-                    // completedSubtasks.forEach((subTask, index) => {
-                    //     // substask[index].classList.add('subtask-checked')
-                    //     console.log(subTask)
-                    // })
+                        // get completed subtask array and parse it into js object
+                        let completedSubtasks = JSON.parse(taskData[index].completedSubtasks);
 
-                    // get completed subtask length
-                    let completedSubtasksLength = completedSubtasks.filter(sub => {
-                        if(sub == 'true') {
-                            return true
+                        // updating column
+                        switch (status) {
+                            case 'todo':
+                                todoOutput += `
+                                    <div class="column-task">
+                                        <p>${task.taskTitle}</p>
+                                        <p>${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength} substasks</p>
+                                    </div>
+                                `
+                                break;
+                            case 'doing':
+                                doingOutput += `
+                                    <div class="column-task">
+                                        <p>${task.taskTitle}</p>
+                                        <p>${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength} substasks</p>
+                                    </div>
+                                `
+                                break;
                         }
-                        return false
-                    }).length; 
 
-                    let stat = taskData[index].taskStatus;
+                })
+                todoTaskColumnWrapper.innerHTML = todoOutput;
+                doingTaskColumnWrapper.innerHTML = doingOutput;
+                    
+                    let todotasks = document.querySelectorAll('.todo .column-task-wrapper > div');
+                    let doingtasks = document.querySelectorAll('.doing .column-task-wrapper > div');
+                    displayTodoTasksInfosOnClick(todotasks, boardId);
+                    displayDoingTasksInfosOnClick(doingtasks, boardId);
+                    // displayTaskInfoOnClick(taskData);
 
-
-                    switch (status) {
-                        case 'todo':
-                            todoOutput += `
-                                <div class="column-task">
-                                    <p>${task.taskTitle}</p>
-                                    <p>${completedSubtasksLength} of ${subLength} substasks</p>
-                                </div>
-                            `
-                            break;
-                        case 'doing':
-                            doingOutput += `
-                                <div class="column-task">
-                                    <p>${task.taskTitle}</p>
-                                    <p>${completedSubtasksLength} of ${subLength} substasks</p>
-                                </div>
-                            `
-                            break;
-                    }
-
-            })
-            todoTaskColumnWrapper.innerHTML = todoOutput;
-            doingTaskColumnWrapper.innerHTML = doingOutput;
-                
-                let todotasks = document.querySelectorAll('.todo .column-task-wrapper > div');
-                let doingtasks = document.querySelectorAll('.doing .column-task-wrapper > div');
-                displayTodoTasksInfosOnClick(todotasks, boardId);
-                // displayDoingTasksInfosOnClick(doingtasks, boardId);
-                // displayTaskInfoOnClick(taskData);
-
-            }
+                }
             }
 
             xhr2.onload = function() {
@@ -634,7 +616,6 @@ function fetchTaskData(index) {
             xhr3.send();
             xhr4.send();
             xhr5.send();
-        // }
         }
 
     }
@@ -647,7 +628,7 @@ function fetchTaskData(index) {
 
 // handle input checkbox SCRIPTS START
 
-function updateSubtasksInputCheckbox(taskID, inputIndex) {
+function updateSubtasksInputCheckbox(taskID, inputIndex, taskIndex, taskStatus) {
     let xml = new XMLHttpRequest();
     xml.onreadystatechange = function () {
         if(this.readyState == 4 && this.status == 200) {
@@ -662,29 +643,43 @@ function updateSubtasksInputCheckbox(taskID, inputIndex) {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', './include/updateTask.inc.php', true)
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
+            
             xhr.onload = function() {
                 if(this.status === 200) {
+                    let tasksWrapper = document.querySelectorAll(`.${taskStatus} .column-task-wrapper > div p:nth-child(2)`)
+                    let viewTaskSubtask = document.querySelector('.view-task-subtasks h5')
+
                     console.log(xhr.responseText)
+
+                    let xml = new XMLHttpRequest();
+                    xml.open('GET', './include/fetchSubtasks.inc.php?taskID='+taskID, true)
+                    xml.onload = function() {
+                        let output = '';
+                        let output2 = '';
+
+                        let data = JSON.parse(xml.responseText);
+                        let completedSubtasks = JSON.parse(data[0].completedSubtasks);
+                        let subLength = completedSubtasks.length
+                        output += `${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength} substasks`
+                        output2 += `Subtasks (${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength})`
+                        // console.log(output)
+                        tasksWrapper[taskIndex].innerHTML = output;
+                        viewTaskSubtask.innerHTML = output2;
+                    }
+                    xml.send();
                 }
             }
             const CompleteSubtask = {myarr, taskID}
             const CompletedSubtaskJson = JSON.stringify(CompleteSubtask)
             xhr.send(CompletedSubtaskJson)
-
-            // console.log(myarr)
         }
     }
     xml.open('GET', './include/fetchSubtasks.inc.php?taskID='+taskID, true)
-    // xml.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    // const updateSubtasksData = {taskID, index, subLength}
-    // xml.open('GET', './include/fetchtaskdata.inc.php?taskID='+taskID, true);
-    // const updateSubtasksJsonData = JSON.stringify(updateSubtasksData)
     xml.send();
 
 }
 
-function handleSubtaskCheckboxChange(taskIndex) {
+function handleSubtaskCheckboxChange(taskID, taskIndex, taskStatus) {
     const subtaskInputCheckbox = document.querySelectorAll('.subtask-checkbox-wrapper input[type="checkbox"]')
     const subtaskTextContent = document.querySelectorAll('.subtask-checkbox-wrapper p')
     
@@ -694,38 +689,21 @@ function handleSubtaskCheckboxChange(taskIndex) {
     // console.log(subtaskInputs)
 
     subtaskInputs.forEach((input, index) => {
-        // console.log(input)
         input.addEventListener('click', () => {
-            // console.log(taskIndev)
-            updateSubtasksInputCheckbox(taskIndex, index)
-
-            if(input.checked) {
-                subtaskContents[index].classList.add('subtask-checked')
-                // testingfunc(input.checked, index)
-                // let xml = new XMLHttpRequest();
-                // xml.
-                // handleTest(taskIndev, index)
+            updateSubtasksInputCheckbox(taskID, index, taskIndex, taskStatus)
+            if(input.checked){
+                subtaskTextContent[index].classList.add('subtask-checked')
             } else {
-                subtaskContents[index].classList.remove('subtask-checked')
-                // testingfunc(input.checked, index)
+                subtaskTextContent[index].classList.remove('subtask-checked')
             }
-
         })
     })
 }
-
 // handle input checkbox SCRIPTS END
 
-function testingfunc(inputChecked, index) {
-    inputChecked ? console.log('true', index) : console.log('false', index) 
-}
-
 // handle showing/hiding of task view modal onclik SCRIPTS START
-
 const viewTaskBgOverlay = document.querySelector('.view-task-bg-overlay')
 const viewTaskModal = document.querySelector('.view-task-modal');
-
-// console.log(viewTaskBgOverlay, viewTaskModal)
 
 function showViewTaskModal() {
     viewTaskBgOverlay.classList.remove('display-none')
@@ -736,9 +714,7 @@ function hideViewTaskModal() {
     viewTaskBgOverlay.classList.add('display-none')
     viewTaskModal.classList.add('display-none')
 }
-
 viewTaskBgOverlay.addEventListener('click', hideViewTaskModal)
-
 // handle showing/hiding of task view modal onclik SCRIPTS END
 
 // display todo task infos onclick SCRIPTS START
@@ -762,7 +738,9 @@ for (let i = 0; i < todoData.length; i++) {
             req.onload = function() {
                 if(this.status === 200) {
                     let fetcheddata = JSON.parse(req.responseText);
-                    // console.log(fetcheddata[i].taskID);
+                    // console.log(fetcheddata[i].taskStatus);
+
+                    let taskStatus = fetcheddata[i].taskStatus;
 
                     // get subtask and parse it into js object
                     let subtask = JSON.parse(fetcheddata[i].substasks);
@@ -775,18 +753,6 @@ for (let i = 0; i < todoData.length; i++) {
                     // get completed subtask array and parse it into js object
                     let completedSubtasks = JSON.parse(fetcheddata[i].completedSubtasks);
 
-                    // completedSubtasks.forEach((subtask) => {
-                    //     if(subtask) {
-                    //         console.log(subtask);
-                    //     } 
-                    // })
-
-                    // get completed subtask length
-                    let completedSubtasksLength = completedSubtasks.filter(sub => {
-                        if(sub == 'true') {return true}
-                        return false
-                    }).length; 
-
                     // set description to empty string if its value is null
                     if(fetcheddata[i].taskDescription == null) {
                         fetcheddata[i].taskDescription = '';
@@ -796,30 +762,21 @@ for (let i = 0; i < todoData.length; i++) {
                     let output2 = '';
 
                     subtask.forEach((sub, index) => {
-                        // if(completedSubtasks[index]) {
-                        //     console.log('workin')
-                        // } else {
-                        //     console.log('nop')
-                        // }
-
-                        // console.log(completedSubtasks[i])
-                        // completedSubtasks.forEach((subtask, index) => {
-                        //     if(subtask) {
-                        //         console.log(sub[index])
-                        //         sub[index].classList.add('subtask-checked')
-                        //     }
-                        // })
-
-                        // if(completedSubtasks[index]) {
-                        //     sub.classList.add('subtask-checked')
-                        // }
-
-                        output2 += `
-                            <div class="subtask-checkbox-wrapper">
-                                <input type="checkbox" name="" id="">
-                                <p>${sub}</p>
-                            </div>
-                        `
+                        if(completedSubtasks[index] == 'true') {
+                            output2 += `
+                                <div class="subtask-checkbox-wrapper">
+                                    <input type="checkbox" checked name="" id="">
+                                    <p class='subtask-checked'>${sub}</p>
+                                </div>
+                            `
+                        } else {
+                            output2 += `
+                                <div class="subtask-checkbox-wrapper">
+                                    <input type="checkbox" name="" id="">
+                                    <p>${sub}</p>
+                                </div>
+                            `
+                        }
                     })
 
                     output += `
@@ -835,13 +792,13 @@ for (let i = 0; i < todoData.length; i++) {
                                 <p>${fetcheddata[i].taskDescription}</p>
                             </div>
                             <div class="view-task-subtasks">
-                                <h5>Subtasks (${completedSubtasksLength} of ${subLength})</h5>
+                                <h5>Subtasks (${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength})</h5>
                                 ${output2}
                             </div> 
                         `
 
                     viewTaskModal.innerHTML = output;
-                    handleSubtaskCheckboxChange(fetcheddata[i].taskID)
+                    handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                 }
                 // handleSubtaskCheckboxChange()
             }
@@ -857,39 +814,84 @@ for (let i = 0; i < todoData.length; i++) {
 
 // display doing task infos onclick SCRIPTS START
 const displayDoingTasksInfosOnClick = (doingTasks, boardid) => {
+    const viewTaskModal = document.querySelector('.view-task-modal');
 let doingData = Array.from(doingTasks);
 
     for (let i = 0; i < doingData.length; i++) {
-        console.log(doingData[i])
-        // function clicked() {
-        //     console.log(doingData[i], i, boardid);
-        //     let req = new XMLHttpRequest();
-        //     // req.open('GET', './getboardname.class.php', true);
-        //     req.open('GET', './include/fetchTodoTask.inc.php?bid='+boardid, true);
-        //     req.onload = function() {
-        //         if(this.status === 200) {
-        //             let fetcheddata = JSON.parse(req.responseText);
-        //             // taskdata = data[i]
-        //             // console.log(fetcheddata)
-        //             console.log(fetcheddata[i].taskDescription)
-        //             // console.log(req.responseText)
-        //         }
-        //     }
-        //     req.send();
-        //     // console.log('yup')
-            console.log(doingData[i].querySelector('p:nth-child(1)'))
-        // }
-        // data[i].addEventListener('click', clicked);
-    }
-
-    // data.forEach(el => {
-    //     console.log(el)
-    //     el.addEventListener('click', () => console.log(el));
-    // })
-
-    // console.log(task)
+        // console.log(doingData[i])
+        function clicked() {
+            showViewTaskModal()
+                let req = new XMLHttpRequest();
+                // req.open('GET', './getboardname.class.php', true);
+                req.open('GET', './include/fetchDoingTaskData.inc.php?bid='+boardid, true);
+                req.onload = function() {
+                    if(this.status === 200) {
+                        let fetcheddata = JSON.parse(req.responseText);
+                        // console.log(fetcheddata[i].taskID);
+                        let taskStatus = fetcheddata[i].taskStatus
     
-    // console.log(data)
+                        // get subtask and parse it into js object
+                        let subtask = JSON.parse(fetcheddata[i].substasks);
+    
+                        // get subtask length
+                        let subLength = subtask.length;
+    
+                        // get completed subtask array and parse it into js object
+                        let completedSubtasks = JSON.parse(fetcheddata[i].completedSubtasks);
+    
+                        // set description to empty string if its value is null
+                        if(fetcheddata[i].taskDescription == null) {
+                            fetcheddata[i].taskDescription = '';
+                        }
+                        
+                        let output = '';
+                        let output2 = '';
+    
+                        subtask.forEach((sub, index) => {
+                            if(completedSubtasks[index] == 'true') {
+                                output2 += `
+                                    <div class="subtask-checkbox-wrapper">
+                                        <input type="checkbox" checked name="" id="">
+                                        <p class='subtask-checked'>${sub}</p>
+                                    </div>
+                                `
+                            } else {
+                                output2 += `
+                                    <div class="subtask-checkbox-wrapper">
+                                        <input type="checkbox" name="" id="">
+                                        <p>${sub}</p>
+                                    </div>
+                                `
+                            }
+                        })
+    
+                        output += `
+                                <div class="view-task-title">
+                                    <h3>${fetcheddata[i].taskTitle}</h3>
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    <div class="amend-view-task display-none">
+                                    <a>Edit task</a>
+                                    <a>Delete task</a>
+                                    </div>
+                                </div>
+                                <div class="view-task-description">
+                                    <p>${fetcheddata[i].taskDescription}</p>
+                                </div>
+                                <div class="view-task-subtasks">
+                                    <h5>Subtasks (${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength})</h5>
+                                    ${output2}
+                                </div> 
+                            `
+    
+                        viewTaskModal.innerHTML = output;
+                        handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
+                    }
+                    // handleSubtaskCheckboxChange()
+                }
+                req.send();
+            }
+            doingData[i].addEventListener('click', clicked);
+    }
 
 }
 // display doing task infos onclick SCRIPTS START
