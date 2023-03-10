@@ -67,7 +67,6 @@ if(!isset($_SESSION['visited'])) {
               <h1>Platform Launch</h1>
               <div class="newTaskBtnWrapper">
                 <button disabled><i class="fa-solid fa-plus"></i> Add New Task</button>
-                <!-- <button disabled>Add New Task</button> -->
                 <i class="fa-solid fa-ellipsis-vertical"></i>
                 <div class="amend-board-box display-none">
                   <a>Edit Board</a>
@@ -125,12 +124,7 @@ if(!isset($_SESSION['visited'])) {
                         <span class="column">DOING</span>
                         <span class="task-number">(0)</span>
                     </div>
-                    <div class="column-task-wrapper">
-                        <!-- <div class="column-task">
-                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa obcaecati rerum ex aliquid cum repellat voluptatum quisquam. Voluptatum consequatur ad, ipsum dolor at doloribus aperiam, possimus nemo facilis, obcaecati sequi dignissimos blanditiis est beatae maxime officia. Temporibus eaque labore consequuntur!</p>
-                          <p>1 of 1 substasks</p>
-                        </div> -->
-                    </div>
+                    <div class="column-task-wrapper"></div>
                 </div>
                 <div class="done">
                     <div class="column-name">
@@ -140,7 +134,7 @@ if(!isset($_SESSION['visited'])) {
                     </div>
                     <div class="column-task-wrapper"></div>
                 </div>
-                <div class="onhold">
+                <div class="on-hold">
                     <div class="column-name">
                         <span class="column-color"></span>
                         <span>ON HOLD</span>
@@ -186,6 +180,8 @@ if(!isset($_SESSION['visited'])) {
                 <select id="task-status">
                   <option value="todo">Todo</option>
                   <option value="doing">Doing</option>
+                  <option value="done">Done</option>
+                  <option value="on-hold">On-Hold</option>
                   <!-- <option value="opel">Opel</option> -->
                   <!-- <option value="audi">Audi</option> -->
                 </select>
