@@ -58,31 +58,34 @@ class Account {
     }
 
     public function fetchNumberOfTodoTask($boardID) {
-        $query = $this->con->prepare('SELECT COUNT(*) AS todo_task_number FROM task WHERE taskStatus = "todo" AND boardID = :id');
+        $query = $this->con->prepare('SELECT COUNT(*) AS todo_task_number FROM task WHERE taskStatus = :status AND boardID = :id');
         $query->bindValue(':id', $boardID);
+        $query->bindValue(':status', "todo");
         $query->execute();
         $results = $query->fetchAll();
         return json_encode($results);
     }
 
     public function fetchNumberOfDoingTask($boardID) {
-        $query = $this->con->prepare('SELECT COUNT(*) AS doing_task_number FROM task WHERE taskStatus = "doing" AND boardID = :id');
+        $query = $this->con->prepare('SELECT COUNT(*) AS doing_task_number FROM task WHERE taskStatus = :status AND boardID = :id');
         $query->bindValue(':id', $boardID);
+        $query->bindValue(':status', "doing");
         $query->execute();
         $results = $query->fetchAll();
         return json_encode($results);
     }
 
     public function fetchNumberOfDoneTask($boardID) {
-        $query = $this->con->prepare('SELECT COUNT(*) AS done_task_number FROM task WHERE taskStatus = "done" AND boardID = :id');
+        $query = $this->con->prepare('SELECT COUNT(*) AS done_task_number FROM task WHERE taskStatus = :status AND boardID = :id');
         $query->bindValue(':id', $boardID);
+        $query->bindValue(':status', "done");
         $query->execute();
         $results = $query->fetchAll();
         return json_encode($results);
     }
     
     public function fetchNumberOfOnHoldTask($boardID) {
-        $query = $this->con->prepare('SELECT COUNT(*) AS onhold_task_number FROM tasks WHERE taskStatus = "on-hold" AND boardID = :id');
+        $query = $this->con->prepare('SELECT COUNT(*) AS onhold_task_number FROM task WHERE taskStatus = "on-hold" AND boardID = :id');
         $query->bindValue(':id', $boardID);
         $query->execute();
         $results = $query->fetchAll();
@@ -102,6 +105,24 @@ class Account {
     public function fetchDoingTasksData($boardID) {
         $query = $this->con->prepare('SELECT * FROM task WHERE taskStatus = :status AND boardID = :id');
         $query->bindValue(':status', "doing");
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+
+    public function fetchDoneTasksData($boardID) {
+        $query = $this->con->prepare('SELECT * FROM task WHERE taskStatus = :status AND boardID = :id');
+        $query->bindValue(':status', "done");
+        $query->bindValue(':id', $boardID);
+        $query->execute();
+        $results = $query->fetchAll();
+        return json_encode($results);
+    }
+
+    public function fetchOnHoldTasksData($boardID) {
+        $query = $this->con->prepare('SELECT * FROM task WHERE taskStatus = :status AND boardID = :id');
+        $query->bindValue(':status', "on-hold");
         $query->bindValue(':id', $boardID);
         $query->execute();
         $results = $query->fetchAll();
