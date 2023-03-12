@@ -147,6 +147,8 @@ function getBoard() {
             createdBoardContainer.innerHTML = output;
             handleActiveBoard();
         }
+        // const createdBoardContents = document.querySelectorAll('.created-boards > div');
+        // toggleEditOrDeleteBoardBox();
     }
     xhr.send();
 }
@@ -178,6 +180,11 @@ function handleActiveBoard() {
     const createdBoardContents = document.querySelectorAll('.created-boards > div');
     const filledBoardWrapper = document.querySelectorAll('.filled-board-wrapper');
 
+
+    // const amendBoardBox = document.querySelector('.amend-board-box')
+    // const amendBoardBtn = document.querySelector('.newTaskBtnWrapper .fa-ellipsis-vertical');
+
+
     createdBoardContents.forEach((content, index) => {
         function activeBoard() {
             if(!content.classList.contains('active-board')) {
@@ -188,6 +195,13 @@ function handleActiveBoard() {
                 
                 // function enabling add new task button in header once a board is clicked
                 enableHeaderBtn();
+
+                // displayAmendBoardBox(index);
+                // toggleEditOrDeleteBoardBox(index)
+                // amendBoardBtn.addEventListener('click', () => {
+                //     amendBoardBox.classList.toggle('display-none')
+                // })
+                removeBoardBoxPointerEvent()
 
                 // call display filled-board function
                 displayFilledBoard();
@@ -444,6 +458,7 @@ function insertNewTask(data) {
 
                 // call fetchTaskData function after post request with board index to automatically update the DOM with the new data
                 fetchTaskData(data.selectedBoardIndex)
+                // displayAmendBoardBox(data.selectedBoardIndex)
             }
 
             // create object to store tasks elements value
@@ -493,8 +508,17 @@ function returnCompletedSubtaskLength(completedSubtasks) {
 }
 // function handling the return completed subtasks length function END
 
+let id = '';
+
+// testEditBoard('boardId')
+
+
 // fetch task data based on board id SCRIPTS START
 function fetchTaskData(index) {
+    // displayAmendBoardBox(index);
+    toggleEditOrDeleteBoardBox(index)
+
+
 
     // fetch boardId from database using board index
     let xhr = new XMLHttpRequest();
@@ -503,6 +527,10 @@ function fetchTaskData(index) {
         if(this.status == 200) {
             let results = JSON.parse(this.responseText);
             let boardId = results[index].boardID;
+
+            // displayAmendBoardBox(id);
+
+            // toggleEditOrDeleteBoardBox
             
             // http request to fetch task data
             let xml = new XMLHttpRequest();
@@ -834,22 +862,21 @@ const displayDoingTasksInfosOnClick = (doingTasks, boardid) => {
 let doingData = Array.from(doingTasks);
 
     for (let i = 0; i < doingData.length; i++) {
-        // console.log(doingData[i])
+
         function clicked() {
             showViewTaskModal()
                 let req = new XMLHttpRequest();
-                // req.open('GET', './getboardname.class.php', true);
+
                 req.open('GET', './include/fetchDoingTaskData.inc.php?bid='+boardid, true);
                 req.onload = function() {
                     if(this.status === 200) {
                         let fetcheddata = JSON.parse(req.responseText);
-                        // console.log(fetcheddata[i].taskID);
+
                         let taskStatus = fetcheddata[i].taskStatus
-    
+
                         // get subtask and parse it into js object
                         let subtask = JSON.parse(fetcheddata[i].substasks);
     
-                        // get subtask length
                         let subLength = subtask.length;
     
                         // get completed subtask array and parse it into js object
@@ -898,11 +925,11 @@ let doingData = Array.from(doingTasks);
                                     ${output2}
                                 </div> 
                             `
-    
+
                         viewTaskModal.innerHTML = output;
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     }
-                    // handleSubtaskCheckboxChange()
+
                 }
                 req.send();
             }
@@ -919,19 +946,16 @@ const displayDoneTasksInfosOnClick = (donetasks, boardid) => {
 let doneTaskData = Array.from(donetasks);
 
     for (let i = 0; i < doneTaskData.length; i++) {
-        // console.log(doingData[i])
         function clicked() {
             showViewTaskModal()
                 let req = new XMLHttpRequest();
-                // req.open('GET', './getboardname.class.php', true);
                 req.open('GET', './include/fetchDoneTask.inc.php?bid='+boardid, true);
                 req.onload = function() {
                     if(this.status === 200) {
                         let fetcheddata = JSON.parse(req.responseText);
-                        // console.log(fetcheddata[i].taskID);
+                        
                         let taskStatus = fetcheddata[i].taskStatus
     
-                        // get subtask and parse it into js object
                         let subtask = JSON.parse(fetcheddata[i].substasks);
     
                         // get subtask length
@@ -983,11 +1007,11 @@ let doneTaskData = Array.from(donetasks);
                                     ${output2}
                                 </div> 
                             `
-    
+
                         viewTaskModal.innerHTML = output;
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     }
-                    // handleSubtaskCheckboxChange()
+
                 }
                 req.send();
             }
@@ -1003,16 +1027,14 @@ const displayOnHoldTasksInfosOnClick = (onHoldtasks, boardid) => {
 let onHoldTaskData = Array.from(onHoldtasks);
 
     for (let i = 0; i < onHoldTaskData.length; i++) {
-        // console.log(doingData[i])
         function clicked() {
             showViewTaskModal()
                 let req = new XMLHttpRequest();
-                // req.open('GET', './getboardname.class.php', true);
                 req.open('GET', './include/fetchOnHoldTaskData.inc.php?bid='+boardid, true);
                 req.onload = function() {
                     if(this.status === 200) {
                         let fetcheddata = JSON.parse(req.responseText);
-                        // console.log(fetcheddata[i].taskID);
+
                         let taskStatus = fetcheddata[i].taskStatus
     
                         // get subtask and parse it into js object
@@ -1067,11 +1089,11 @@ let onHoldTaskData = Array.from(onHoldtasks);
                                     ${output2}
                                 </div> 
                             `
-    
+
                         viewTaskModal.innerHTML = output;
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     }
-                    // handleSubtaskCheckboxChange()
+
                 }
                 req.send();
             }
@@ -1093,3 +1115,156 @@ const toggleAmendViewTaskWrapper = () => {
 // amendViewTaskBtn.addEventListener('click', toggleAmendViewTaskWrapper)
 
 // handle view task modal SCRIPTS END
+
+// handle edit/delete board SCRIPTS START
+    
+
+    const editBoard = (boardID) => {
+        const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
+
+
+        editBoardTaskBtn.addEventListener('click', () => {
+            console.log(boardID)
+            hideAmendBoardBox()
+        })
+
+    }
+
+    function hideDeleteBoardPrompt() {
+        const deleteBoardBgOverlay = document.querySelector('.delete-board-bg-overlay')
+        const deleteBoardPrompt = document.querySelector('.delete-board-prompt')
+
+        // deleteBoardBgOverlay.style.display = 'none'
+        if(!deleteBoardBgOverlay.classList.contains('display-none')) {
+            deleteBoardBgOverlay.classList.add('display-none')
+        }
+        if(!deleteBoardPrompt.classList.contains('display-none')) {
+            deleteBoardPrompt.classList.add('display-none')
+        }
+        // deleteBoardPrompt.style.display = 'none'
+    }
+
+    const deleteBoard = (boardID) => {
+
+        const deleteBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(2)')
+
+        const deleteBoardBgOverlay = document.querySelector('.delete-board-bg-overlay')
+        const deleteBoardPrompt = document.querySelector('.delete-board-prompt')
+
+        const proceedToDeleteBtn = document.querySelector('.delete-btn-options .delete')
+        const cancelDeleteBtn = document.querySelector('.delete-btn-options .cancel')
+
+        deleteBoardTaskBtn.addEventListener('click', () => {
+            hideAmendBoardBox()
+            // deleteBoardBgOverlay.style.display = 'block'
+            deleteBoardBgOverlay.classList.remove('display-none')
+            deleteBoardPrompt.classList.remove('display-none')
+            // deleteBoardPrompt.style.display = 'block'
+        })
+
+        cancelDeleteBtn.addEventListener('click', () => {
+            hideAmendBoardBox()
+            hideDeleteBoardPrompt()
+        })
+
+        proceedToDeleteBtn.addEventListener('click', () => {
+
+            let serverDeleteRequest = new XMLHttpRequest();
+            serverDeleteRequest.open('POST', './include/deleteBoard.inc.php', true);
+            serverDeleteRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+
+            serverDeleteRequest.onload = function() {
+                if(this.status === 200 && this.readyState == 4) {
+                    console.log(serverDeleteRequest.responseText)
+                    getBoard();
+                    getBoardNumber();
+                }
+            }
+            const id = {boardID}
+            const jsonBoardID = JSON.stringify(id)
+            serverDeleteRequest.send(jsonBoardID)
+            hideDeleteBoardPrompt()
+        })
+
+    }
+
+    const hideAmendBoardBox = () => {
+        const amendBoardBox = document.querySelector('.amend-board-box')
+        if(!amendBoardBox.classList.contains('display-none')) {
+            amendBoardBox.classList.add('display-none')
+        }
+    }
+    
+    const amendBoardBox = document.querySelector('.amend-board-box')
+    const amendBoardBtn = document.querySelector('.newTaskBtnWrapper .fa-ellipsis-vertical');
+
+    const displayAmendBoardBox = (boardID) => {
+        // editBoard(id)
+        // deleteBoard(id)
+    }
+
+    let isRun = false;
+
+    // const createdBoardContents = document.querySelectorAll('.created-boards > div');
+    function toggleEditOrDeleteBoardBox2() {
+        const createdBoardContents = document.querySelectorAll('.created-boards > div');
+        let boards = Array.from(createdBoardContents)
+        console.log(boards)
+            boards.forEach((board, index) => {
+                if(board.classList.contains('active-board')) {
+                console.log(index)
+                isRun = true;
+                console.log(isRun)
+            }
+        })
+    }
+
+    function toggleEditOrDeleteBoardBox(boardID) {
+        amendBoardBtn.addEventListener('click', () => {
+            amendBoardBox.classList.toggle('display-none')
+            if(!amendBoardBox.classList.contains('display-none')) {
+                console.log(boardID)
+            }
+        })
+    }
+
+    // amendBoardBtn.addEventListener('click', () => {
+    //     const createdBoardContents = document.querySelectorAll('.created-boards > div');
+    //     const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
+    //     const deleteBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(2)')
+
+    //     amendBoardBox.classList.toggle('display-none')
+    //     // console.log(Array.from(createdBoardContents))
+    //     let boards = Array.from(createdBoardContents)
+
+    //     editBoardTaskBtn.addEventListener('click', () => {
+    //         boards.forEach((board, index) => {
+    //             if(board.classList.contains('active-board')) {
+    //                 console.log(index)
+    //             }
+    //         })
+    //     })
+
+    // })
+
+    function editBoardTest(index) {
+        const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
+        editBoardTaskBtn.addEventListener('click', () => {
+            console.log(index)
+        })
+    }
+
+
+
+    function removeBoardBoxPointerEvent() {
+        const amendBoardBtn = document.querySelector('.newTaskBtnWrapper .fa-ellipsis-vertical');
+        amendBoardBtn.style.pointerEvents = 'initial';
+    }
+
+
+
+
+    // amendBoardBtn.addEventListener('click', displayAmendBoardBox)
+
+    // console.log(deleteBoardTaskBtn.innerHTML)
+// handle edit/delete board SCRIPTS END
