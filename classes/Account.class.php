@@ -138,7 +138,15 @@ class Account {
         if($query) {
             echo "Subtasks updated successfully";
         }
+    }
 
+    public function deleteBoard($boardID) {
+        $query = $this->con->prepare('DELETE FROM board WHERE boardID = :boardID');
+        $query->bindValue(':boardID', $boardID);
+        $query->execute();
+        // if($query) {
+        //     echo "Board deleted successfully";
+        // }
     }
 
 
