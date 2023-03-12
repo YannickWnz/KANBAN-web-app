@@ -23,8 +23,5 @@ CREATE TABLE `task` (
     `completedSubtasks` JSON,
     `taskStatus` VARCHAR(10) NOT NULL,
     `boardID` INT,
-    FOREIGN KEY (`boardID`) REFERENCES `board`(`boardID`)
+    FOREIGN KEY (`boardID`) REFERENCES `board`(`boardID`) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
--- ALTER TABLE task ADD COLUMN completedSubtasks JSON AFTER substasks;
