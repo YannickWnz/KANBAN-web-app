@@ -21,26 +21,24 @@ $substask2 = Sanitize::sanitizeInput($data['substask2']);
 $substask3 = Sanitize::sanitizeInput($data['substask3']);
 $boardId = $data['boardId'];
 $taskStatus = Sanitize::sanitizeStatus($data['taskStatus']);
+$taskUniqID = uniqid();
 
 if(strlen($substask2) == 0 && strlen($substask3) == 0){
     $sub = array("$substask1");
+    $completedSub = array("false");
 } else if (strlen($substask3) == 0) {
     $sub = array("$substask1", "$substask2");
+    $completedSub = array("false", "false");
 } else {
     $sub = array("$substask1", "$substask2", "$substask3");
+    $completedSub = array("false", "false", "false");
 }
 
 // turn array into json format
 $json = json_encode($sub);
+$completeSubJson = json_encode($completedSub);
 
-$taskSuccessfulInsert = $insert->insertTask($boardId, $taskTitle, $taskDescription, $json, $taskStatus);
-
-// echo $json;
-// $insert->insertTask($boardId, $taskTitle, $taskDescription, $json, $taskStatus);
-
-// if(!$taskSuccessfulInsert) {
-//     echo "Error occurred";
-// }
+$taskSuccessfulInsert = $insert->insertTask($boardId, $taskTitle, $taskDescription, $json, $completeSubJson, $taskStatus);
 
 
 
