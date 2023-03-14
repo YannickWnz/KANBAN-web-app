@@ -508,10 +508,12 @@ function returnCompletedSubtaskLength(completedSubtasks) {
 }
 // function handling the return completed subtasks length function END
 
-let id = '';
 
 // testEditBoard('boardId')
 
+
+let currentBoardID = '';
+let currentBoardName = '';
 
 // fetch task data based on board id SCRIPTS START
 function fetchTaskData(index) {
@@ -527,6 +529,14 @@ function fetchTaskData(index) {
         if(this.status == 200) {
             let results = JSON.parse(this.responseText);
             let boardId = results[index].boardID;
+            let boardName = results[index].boardName
+
+            // set current board name to board name fetched from the db   
+            currentBoardName = boardName;
+            // set current board id to board id fetched from the db   
+            currentBoardID = boardId;
+            
+            // console.log(boardName)
 
             // http request to fetch task data
             let xml = new XMLHttpRequest();
@@ -1134,8 +1144,6 @@ const toggleAmendViewTaskWrapper = () => {
         }
     }
 
-    const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
-
     // toggle amend board box on btn click START 
     const amendBoardBox = document.querySelector('.amend-board-box')
     const amendBoardBtn = document.querySelector('.newTaskBtnWrapper .fa-ellipsis-vertical');
@@ -1180,6 +1188,7 @@ const toggleAmendViewTaskWrapper = () => {
     // cancel delete board function START
 
 
+    // proceed to board deletion function START
     const proceedToDeleteBoardBtn = document.querySelector('.delete-btn-options .delete')
         function proceedToDeleteBoard() {
             const createdBoardContents = document.querySelectorAll('.created-boards > div');
@@ -1218,6 +1227,75 @@ const toggleAmendViewTaskWrapper = () => {
             
         }
         proceedToDeleteBoardBtn.addEventListener('click', proceedToDeleteBoard)
+    // proceed to board deletion function END
 
+    // edit board scripts START
+    const editBoardBtn = document.querySelector('.amend-board-box a:nth-child(1)')
+    const editBoardPromptBgOverlay = document.querySelector('.edit-board-bg-overlay')
+    const editBoardPrompt = document.querySelector('.edit-board-form')
+    const edit_board_form = document.querySelector('.edit-board-form form')
+    const edit_board_form_text_input = document.querySelector('.edit-board-form input[type=text]')
+
+    function set_edit_form_input_to_current_boardname() {
+        edit_board_form_text_input.value = currentBoardName;
+    }
+
+    function process_board_changes(e) {
+        e.preventDefault();
+        let emptyBoardError = document.querySelector('.edit-board-form .boardErrorMsg');
+        let newBoardName = edit_board_form_text_input.value
+
+        if(newBoardName.length == 0) {
+            emptyBoardError.style.display = 'block';
+            return false;
+        } else {
+            emptyBoardError.style.display = 'none';
+        }
+
+        let request_to_change_board_name = new XMLHttpRequest();
+        request_to_change_board_name.open('POST', './include/editBoardName.inc.php', true)
+        request_to_change_board_name.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        request_to_change_board_name.onload = function() {
+            if(this.status == 200 && this.readyState == 4) {
+                console.log(this.responseText)
+                getBoard();
+            }
+        }
+        const newBoardData = { newBoardName, currentBoardID }
+        const newBoardJsonData = JSON.stringify(newBoardData)
+        request_to_change_board_name.send(newBoardJsonData)
+
+
+        hide_Edit_Board_Form_Prompt();
+    }
+
+    edit_board_form.addEventListener('submit', process_board_changes)
+
+    
+    function show_Edit_Board_Form_Prompt() {
+        const createdBoardContents = document.querySelectorAll('.created-boards > div');
+
+        editBoardPromptBgOverlay.classList.remove('display-none')
+        editBoardPrompt.classList.remove('display-none')
+        hideAmendBoardBox()
+        set_edit_form_input_to_current_boardname();
+
+    }
+    editBoardBtn.addEventListener('click', show_Edit_Board_Form_Prompt)
+
+
+    function hide_Edit_Board_Form_Prompt() {
+        editBoardPromptBgOverlay.classList.add('display-none')
+        editBoardPrompt.classList.add('display-none')
+    }
+    editBoardPromptBgOverlay.addEventListener('click', hide_Edit_Board_Form_Prompt)
+
+
+    // edit board scripts END
+
+
+    // edit task scripts START
+
+    // edit task scripts END
 
 
