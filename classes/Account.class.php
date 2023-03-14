@@ -145,25 +145,6 @@ class Account {
         $query->bindValue(':boardID', $boardID);
         $query->execute();
 
-        // if($query) {
-        //     echo "Board deleted successfully";
-        // }
     }
-
-    public function deleteBoardTasks($boardID) {
-        $query = $this->con->prepare('DELETE FROM task WHERE boardID = :boardID');
-        $query->bindValue(':boardID', $boardID);
-        $query->execute();
-
-        if($query) {
-            $this->deleteBoard($boardID);
-        }
-
-        // if($query) {
-        //     echo "Board deleted successfully";
-        // }
-    }
-
-
 
 }
