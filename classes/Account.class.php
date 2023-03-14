@@ -144,7 +144,17 @@ class Account {
         $query = $this->con->prepare('DELETE FROM board WHERE boardID = :boardID');
         $query->bindValue(':boardID', $boardID);
         $query->execute();
+    }
 
+    public function editBoardName($boardID, $newBoardName) {
+        $query = $this->con->prepare('UPDATE board SET boardName = :name WHERE boardID = :ID ');
+        $query->bindValue(':ID', $boardID);
+        $query->bindValue(':name', $newBoardName);
+        $query->execute();
+        
+        if($query) {
+            echo "Board Name Successfully changed";
+        }
     }
 
 }
