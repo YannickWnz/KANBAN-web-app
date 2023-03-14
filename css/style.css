@@ -401,6 +401,7 @@ input:checked+.slider:before {
 .newTaskBtnWrapper i.fa-ellipsis-vertical {
     color: whitesmoke;
     cursor: pointer;
+    pointer-events: none;
 }
 
 /* amend board box CSS START */
@@ -948,31 +949,85 @@ input:checked+.slider:before {
 }
 
 .subtask-checked {
-    text-decoration: line-through;
-    color: var(--mediumGrey);
+    text-decoration: line-through !important;
+    color: var(--mediumGrey) !important;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-.display-none {
-    display: none;
-}
-
 
 
 /* add new task section CSS END */
 
+/* delete board prompt CSS START */
+.delete-board-bg-overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.683);
+    z-index: 5;
+}
+
+.delete-board-prompt {
+    width: 450px;
+    min-height: 200px;
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    padding: 30px;
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    /* display: none; */
+}
+
+.delete-board-prompt h3 {
+    color: var(--red);
+}
+
+.delete-board-prompt p {
+    color: var(--mediumGrey);
+    font-size: .9em;
+    line-height: 1.7;
+    margin: 20px 0;
+}
+
+.delete-btn-options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-btn-options button {
+    flex: 1;
+    max-width: 48%;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.delete-btn-options button:nth-child(1) {
+    color: white;
+    font-weight: bold;
+    background-color: var(--red);
+}
+
+.delete-btn-options button:nth-child(2) {
+    color: var(--main-purple);
+    font-weight: bold;
+    background-color: white;
+}
+
+/* delete board prompt CSS END */
+
 
 /* board content custom style END */
+
+.display-none {
+    display: none;
+}
 
 
 
