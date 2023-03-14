@@ -226,6 +226,36 @@ if(!isset($_SESSION['visited'])) {
           </div>
           <!-- view task END -->
 
+          <!-- edit baord prompt START -->
+          <div class="edit-board-bg-overlay display-none"></div>
+          <div class="edit-board-form display-none">
+            <form id="addBoardForm" class="edit-board" method="POST">
+            <!-- <form method="" action="" id="addBoardForm"> -->
+              <p>Add New Board</p>
+              <div class="newBoardName">
+                <label for="boardName">Board Name</label><br>
+                <input type="text" id="board-name" name="boardName" placeholder="e.g. Web Design">
+              </div>
+              <div class="createBoardBtn">
+                <input type="submit" name="submitBoardName" value="Save changes">
+              </div>
+              <p class="boardErrorMsg">Board Name can't be empty</p>
+            </form>
+          </div>
+          <!-- edit baord prompt END -->
+
+          <!-- delete board prompt START -->
+          <div class="delete-board-bg-overlay display-none"></div>
+          <div class="delete-board-prompt display-none">
+            <h3>Delete board?</h3>
+            <p>Are you sure you want to delete 'Platform Launch' board? This action will remove all columns and tasks and cannot be reserved.</p>
+            <div class="delete-btn-options">
+              <button class="delete">Delete</button>
+              <button class="cancel">Cancel</button>
+            </div>
+          </div>
+          <!-- delete board prompt END -->
+
         </div>
       </div>
     </div>
