@@ -516,7 +516,7 @@ let id = '';
 // fetch task data based on board id SCRIPTS START
 function fetchTaskData(index) {
     // displayAmendBoardBox(index);
-    toggleEditOrDeleteBoardBox(index)
+    // toggleEditOrDeleteBoardBox(index)
 
 
 
@@ -528,10 +528,6 @@ function fetchTaskData(index) {
             let results = JSON.parse(this.responseText);
             let boardId = results[index].boardID;
 
-            // displayAmendBoardBox(id);
-
-            // toggleEditOrDeleteBoardBox
-            
             // http request to fetch task data
             let xml = new XMLHttpRequest();
 
@@ -624,11 +620,11 @@ function fetchTaskData(index) {
                     let doingtasks = document.querySelectorAll('.doing .column-task-wrapper > div');
                     let donetasks = document.querySelectorAll('.done .column-task-wrapper > div');
                     let onHoldtasks = document.querySelectorAll('.on-hold .column-task-wrapper > div');
+
                     displayTodoTasksInfosOnClick(todotasks, boardId);
                     displayDoingTasksInfosOnClick(doingtasks, boardId);
                     displayDoneTasksInfosOnClick(donetasks, boardId);
                     displayOnHoldTasksInfosOnClick(onHoldtasks, boardId);
-                    // displayTaskInfoOnClick(taskData);
 
                 }
             }
@@ -1117,76 +1113,19 @@ const toggleAmendViewTaskWrapper = () => {
 // handle view task modal SCRIPTS END
 
 // handle edit/delete board SCRIPTS START
-    
-
-    const editBoard = (boardID) => {
-        const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
-
-
-        editBoardTaskBtn.addEventListener('click', () => {
-            console.log(boardID)
-            hideAmendBoardBox()
-        })
-
-    }
 
     function hideDeleteBoardPrompt() {
         const deleteBoardBgOverlay = document.querySelector('.delete-board-bg-overlay')
         const deleteBoardPrompt = document.querySelector('.delete-board-prompt')
 
-        // deleteBoardBgOverlay.style.display = 'none'
         if(!deleteBoardBgOverlay.classList.contains('display-none')) {
             deleteBoardBgOverlay.classList.add('display-none')
         }
         if(!deleteBoardPrompt.classList.contains('display-none')) {
             deleteBoardPrompt.classList.add('display-none')
         }
-        // deleteBoardPrompt.style.display = 'none'
     }
 
-    const deleteBoard = (boardID) => {
-
-        const deleteBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(2)')
-
-        const deleteBoardBgOverlay = document.querySelector('.delete-board-bg-overlay')
-        const deleteBoardPrompt = document.querySelector('.delete-board-prompt')
-
-        const proceedToDeleteBtn = document.querySelector('.delete-btn-options .delete')
-        const cancelDeleteBtn = document.querySelector('.delete-btn-options .cancel')
-
-        deleteBoardTaskBtn.addEventListener('click', () => {
-            hideAmendBoardBox()
-            // deleteBoardBgOverlay.style.display = 'block'
-            deleteBoardBgOverlay.classList.remove('display-none')
-            deleteBoardPrompt.classList.remove('display-none')
-            // deleteBoardPrompt.style.display = 'block'
-        })
-
-        cancelDeleteBtn.addEventListener('click', () => {
-            hideAmendBoardBox()
-            hideDeleteBoardPrompt()
-        })
-
-        proceedToDeleteBtn.addEventListener('click', () => {
-
-            let serverDeleteRequest = new XMLHttpRequest();
-            serverDeleteRequest.open('POST', './include/deleteBoard.inc.php', true);
-            serverDeleteRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-
-            serverDeleteRequest.onload = function() {
-                if(this.status === 200 && this.readyState == 4) {
-                    console.log(serverDeleteRequest.responseText)
-                    getBoard();
-                    getBoardNumber();
-                }
-            }
-            const id = {boardID}
-            const jsonBoardID = JSON.stringify(id)
-            serverDeleteRequest.send(jsonBoardID)
-            hideDeleteBoardPrompt()
-        })
-
-    }
 
     const hideAmendBoardBox = () => {
         const amendBoardBox = document.querySelector('.amend-board-box')
@@ -1194,77 +1133,91 @@ const toggleAmendViewTaskWrapper = () => {
             amendBoardBox.classList.add('display-none')
         }
     }
-    
+
+    const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
+
+    // toggle amend board box on btn click START 
     const amendBoardBox = document.querySelector('.amend-board-box')
     const amendBoardBtn = document.querySelector('.newTaskBtnWrapper .fa-ellipsis-vertical');
 
-    const displayAmendBoardBox = (boardID) => {
-        // editBoard(id)
-        // deleteBoard(id)
-    }
+    amendBoardBtn.addEventListener('click', () => {
+        amendBoardBox.classList.toggle('display-none')
+    })
+    // toggle amend board box on btn click END
 
-    let isRun = false;
-
-    // const createdBoardContents = document.querySelectorAll('.created-boards > div');
-    function toggleEditOrDeleteBoardBox2() {
-        const createdBoardContents = document.querySelectorAll('.created-boards > div');
-        let boards = Array.from(createdBoardContents)
-        console.log(boards)
-            boards.forEach((board, index) => {
-                if(board.classList.contains('active-board')) {
-                console.log(index)
-                isRun = true;
-                console.log(isRun)
-            }
-        })
-    }
-
-    function toggleEditOrDeleteBoardBox(boardID) {
-        amendBoardBtn.addEventListener('click', () => {
-            amendBoardBox.classList.toggle('display-none')
-            if(!amendBoardBox.classList.contains('display-none')) {
-                console.log(boardID)
-            }
-        })
-    }
-
-    // amendBoardBtn.addEventListener('click', () => {
-    //     const createdBoardContents = document.querySelectorAll('.created-boards > div');
-    //     const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
-    //     const deleteBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(2)')
-
-    //     amendBoardBox.classList.toggle('display-none')
-    //     // console.log(Array.from(createdBoardContents))
-    //     let boards = Array.from(createdBoardContents)
-
-    //     editBoardTaskBtn.addEventListener('click', () => {
-    //         boards.forEach((board, index) => {
-    //             if(board.classList.contains('active-board')) {
-    //                 console.log(index)
-    //             }
-    //         })
-    //     })
-
-    // })
-
-    function editBoardTest(index) {
-        const editBoardTaskBtn = document.querySelector('.amend-board-box a:nth-child(1)')
-        editBoardTaskBtn.addEventListener('click', () => {
-            console.log(index)
-        })
-    }
-
-
-
+    // function enabling button that show edit or delete board box START
     function removeBoardBoxPointerEvent() {
         const amendBoardBtn = document.querySelector('.newTaskBtnWrapper .fa-ellipsis-vertical');
         amendBoardBtn.style.pointerEvents = 'initial';
     }
+    // function enabling button that show edit or delete board box END
 
 
 
+    // Show edith or delete board box function START
+    let deleteBoardBtn = document.querySelector('.amend-board-box a:nth-child(2)')
+    function showEditOrDeleteBoardBox() {
 
-    // amendBoardBtn.addEventListener('click', displayAmendBoardBox)
+        const deleteBoardBgOverlay = document.querySelector('.delete-board-bg-overlay')
+        const deleteBoardPrompt = document.querySelector('.delete-board-prompt')
+        hideAmendBoardBox()
+        deleteBoardBgOverlay.classList.remove('display-none')
+        deleteBoardPrompt.classList.remove('display-none')
 
-    // console.log(deleteBoardTaskBtn.innerHTML)
-// handle edit/delete board SCRIPTS END
+    }
+    deleteBoardBtn.addEventListener('click', showEditOrDeleteBoardBox)
+    // Show edith or delete board box function END
+
+
+    // cancel delete board function START
+    const cancelDeleteBoardBtn = document.querySelector('.delete-btn-options .cancel')
+    function cancelDeleteBoard() {
+        hideAmendBoardBox()
+        hideDeleteBoardPrompt()
+        return;
+    }
+    cancelDeleteBoardBtn.addEventListener('click', cancelDeleteBoard)
+    // cancel delete board function START
+
+
+    const proceedToDeleteBoardBtn = document.querySelector('.delete-btn-options .delete')
+        function proceedToDeleteBoard() {
+            const createdBoardContents = document.querySelectorAll('.created-boards > div');
+            
+            createdBoardContents.forEach((board, index) => {
+                if(board.classList.contains('active-board')) {
+                    console.log(index)
+                    let xml = new XMLHttpRequest();
+                    xml.open('GET', './getboardname.class.php', true);
+                    xml.onload = function() {
+                        if(this.readyState == 4 && this.status == 200) {
+                            let results = JSON.parse(this.responseText)
+                            let boardID = results[index].boardID
+                            console.log(boardID)
+                            let serverDeleteRequest = new XMLHttpRequest();
+                            serverDeleteRequest.open('POST', './include/deleteBoard.inc.php', true)
+                            serverDeleteRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+                            serverDeleteRequest.onload = function() {
+                                if(this.status === 200 && this.readyState == 4) {
+                                    console.log(this.responseText)
+                                    getBoard();
+                                    getBoardNumber();
+                                }
+                            }
+                            const id = {boardID}
+                            const jsonBoardID = JSON.stringify(id)
+                            serverDeleteRequest.send(jsonBoardID)
+                            hideDeleteBoardPrompt();
+
+                        }
+                    }
+                    xml.send()
+                }
+
+        })
+            
+        }
+        proceedToDeleteBoardBtn.addEventListener('click', proceedToDeleteBoard)
+
+
+
