@@ -256,6 +256,50 @@ if(!isset($_SESSION['visited'])) {
           </div>
           <!-- delete board prompt END -->
 
+          <!-- edit task prompt START -->
+          <div class="edit-task-bg-overlay edit-task-bg"></div>
+          <div class="edit-task-form">
+            <form class="edit-task-form" onsubmit="">
+              <p>Edit Task</p>
+              <div class="edit-task-name">
+                <label for="task-name">Title</label><br>
+                <input type="text" placeholder="e.g. Take coffee break">
+                <span class="newTaskEmptyError">Can't be empty</span>
+              </div>
+              <div class="edit-task-description">
+                <label for="task-description">Description</label><br>
+                <textarea name="task-description" placeholder="e.g. It's always good to take a break. This 15 minutes break will recharge thee batteries a little." id="" cols="30" rows="5"></textarea>
+              </div>
+              <div class="edit-task-substasks">
+                <label for="task-substasks">Substasks</label><br>
+                <div class="edit-substask-input-wrapper">
+                  <input type="text" autocomplete="off" name="array[]" placeholder="e.g. Make coffee">
+                  <i class="fa-solid fa-xmark"></i>
+                  <span class="newTaskEmptyError">Can't be empty</span>
+                </div>
+              </div>
+              <div class="edit-substasks-btn" onclick="">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add New Substask</span>
+              </div>
+              <div class="edit-task-status">
+                <label for="task-status">Status</label>
+                <div class="status-options">
+                  <select id="task-status">
+                    <option value="todo">Todo</option>
+                    <option value="doing">Doing</option>
+                    <option value="done">Done</option>
+                    <option value="on-hold">On-Hold</option>
+                  </select>
+                </div>
+              </div>
+              <div class="create-task-btn">
+                <input type="submit" value="Save changes" onsubmit="">
+              </div>
+            </form>
+          </div>
+          <!-- edit task prompt END -->
+
         </div>
       </div>
     </div>
