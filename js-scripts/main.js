@@ -321,7 +321,8 @@ const newTaskValue = () => {
 
     // show error message if task title input is empty
     if(newTaskTitleValue.length == 0) {
-        let taskTitleError = document.querySelector('.new-task-name .newTaskEmptyError');
+        // let taskTitleError = document.querySelector('.new-task-name .newTaskEmptyError');
+        let taskTitleError = document.querySelector('.newTaskEmptyError');
         newTaskTitle.style.border = '1px solid var(--red)';
         taskTitleError.style.display = 'block';  
         return false;
@@ -769,6 +770,11 @@ function hideViewTaskModal() {
 viewTaskBgOverlay.addEventListener('click', hideViewTaskModal)
 // handle showing/hiding of task view modal onclik SCRIPTS END
 
+let selected_task_id = '';
+let selected_task_title = '';
+let selected_task_description = '';
+let selected_task_subtasks = '';
+
 // display todo task infos onclick SCRIPTS START
 const displayTodoTasksInfosOnClick = (todoTasks, boardid) => {
 const subtaskInputCheckbox = document.querySelectorAll('.subtask-checkbox-wrapper input[type="checkbox"]')
@@ -788,6 +794,7 @@ for (let i = 0; i < todoData.length; i++) {
             req.open('GET', './include/fetchTodoTask.inc.php?bid='+boardid, true);
             req.onload = function() {
                 if(this.status === 200) {
+
                     let fetcheddata = JSON.parse(req.responseText);
                     // console.log(fetcheddata[i].taskStatus);
 
@@ -849,7 +856,25 @@ for (let i = 0; i < todoData.length; i++) {
                         `
 
                     viewTaskModal.innerHTML = output;
+
+                    selected_task_id = fetcheddata[i].taskID;
+                    selected_task_title = fetcheddata[i].taskTitle;
+                    selected_task_description = fetcheddata[i].taskDescription;
+                    selected_task_subtasks = subtask;
+
+                    const amend_task_box_wrapper = document.querySelector('.amend-view-task')
+                    const toggle_amend_task_options_btn = document.querySelector('.view-task-title i')
+                    const edit_task_btn = document.querySelector('.amend-view-task a:nth-child(1)')
+                    const delete_task_btn = document.querySelector('.amend-view-task a:nth-child(2)')
+                    const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
+                    amend_task_options(edit_task_data)
+                    // amend_task_options(toggle_amend_task_options_btn, amend_task_box_wrapper, edit_task_btn, delete_task_btn)
+                    // testi.addEventListener('click', () => {
+                    //     console.log('clicking it', fetcheddata[i].taskID)
+                    //     testmodal.classList.toggle('display-none')
+                    // })
                     handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
+                    // testedittask()
                 }
             }
             req.send();
@@ -933,6 +958,13 @@ let doingData = Array.from(doingTasks);
                             `
 
                         viewTaskModal.innerHTML = output;
+                        selected_task_id = fetcheddata[i].taskID;
+                        selected_task_title = fetcheddata[i].taskTitle;
+                        selected_task_subtasks = subtask;
+
+                        const testmodal = document.querySelector('.amend-view-task')
+                        const testi = document.querySelector('.view-task-title i')
+                        testingthing(testmodal, testi)
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     }
 
@@ -1290,11 +1322,235 @@ const toggleAmendViewTaskWrapper = () => {
     }
     editBoardPromptBgOverlay.addEventListener('click', hide_Edit_Board_Form_Prompt)
 
-
     // edit board scripts END
+    
 
 
     // edit task scripts START
+
+    
+
+        const amend_task_box_btn = document.querySelector('.view-task-title i')
+        const amend_task_box = document.querySelector('.amend-view-task')
+
+
+        function toggle_amend_task_box() {
+            amend_task_box.classList.toggle('display-none')
+        }
+
+        function amend_task_options(edit_task_data) {
+            const {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn} = edit_task_data
+            
+            toggle_amend_task_options_btn.addEventListener('click', () => {
+                amend_task_box_wrapper.classList.toggle('display-none')
+            })
+
+            edit_task_btn.addEventListener('click', show_edit_task_form)
+
+            // console.log(edit_task_btn, delete_task_btn)
+
+        }
+
+
+
+        function runEdit() {
+            console.log('edit...')
+        }
+
+        function testingthing(a, b) {
+            console.log(a, b, selected_task_title, selected_task_subtasks)
+            b.addEventListener('click', () => {
+                console.log('we pimpin nigga')
+            })
+        }
+
+    const edit_task_form_bg_overlay = document.querySelector('.edit-task-bg')
+    const edit_task_form_wrapper = document.querySelector(".edit-task-form")
+    const edit_task_form = document.querySelector(".edit-task-form form")
+    const edit_subtask_button = edit_task_form.querySelector('.edit-substasks-btn')
+    const edit_task_form_title = edit_task_form.querySelector('.edit-task-name input[type=text]')
+    const edit_task_form_description = edit_task_form.querySelector('.edit-task-description textarea')
+    let edit_task_title_error = edit_task_form.querySelector('.newTaskEmptyError');
+    let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .newTaskEmptyError');
+    const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
+    let edit_substask_delete_icon = document.querySelectorAll('.edit-substask-input-wrapper i');
+
+
+
+
+
+
+
+    function hide_edit_task_form() {
+        edit_task_form_wrapper.classList.add('display-none')
+        edit_task_form_bg_overlay.classList.add('display-none')
+    }
+    edit_task_form_bg_overlay.addEventListener('click', hide_edit_task_form)
+
+    function show_edit_task_form() {
+        edit_task_form_bg_overlay.classList.remove('display-none')
+        edit_task_form_wrapper.classList.remove('display-none')
+
+        edit_task_form_title.value = selected_task_title
+        edit_task_form_description.value = selected_task_description
+
+    }
+
+    
+    function process_edit_task_form(e) {
+            let error = false;
+            e.preventDefault();
+            if(edit_task_form_title.value.length == 0) {
+                edit_task_form_title.style.border = '1px solid var(--red)';
+                edit_task_title_error.style.display = 'block';  
+                return false;
+            }
+
+            edit_task_subtasks.forEach((substask, index) => {
+                // if(substask.value.length === 0) {
+                    if(substask.value.length == 0) {
+                    console.log(substask)
+                    substask.style.border = '1px solid var(--red)';
+                    edit_substask_delete_icon[index].style.color = 'var(--red)';
+                    edit_subtask_error_msg[index].style.display = 'block';
+                    // error = true;
+
+                    return false;
+                }
+            })
+
+            if(edit_task_subtasks.length == 1 && edit_task_subtasks[0].value.length !== 0) {
+                console.log('yooooo')
+            } else if (edit_task_subtasks.length == 2 &&  edit_task_subtasks[1].value.length !== 0) {
+                console.log('yooooo')
+            }
+            
+            // if(error == true) {
+
+                //     return false;
+                // } 
+                
+                
+            remove_edit_task_substasks_error()
+            
+            // console.log('submitted')
+        }
+
+        edit_task_form.addEventListener('submit', process_edit_task_form)
+
+
+        // let newTaskTitle = document.querySelector('.new-task-name input');
+        // let taskTitleError = document.querySelector('.new-task-name .newTaskEmptyError');
+        // let taskIcon = document.querySelector('.substask-input-wrapper i');
+
+
+        function remove_edit_title_error_msg() {
+            edit_task_form_title.style.border = '1px solid var(--lines)';
+            edit_task_title_error.style.display = 'none';
+        }
+
+        edit_task_form_title.addEventListener('keyup', remove_edit_title_error_msg)
+
+        function remove_edit_task_substasks_error() {
+            // const newTaskSubstasks = document.querySelectorAll('.new-task-substasks .substask-input-wrapper input');
+            // let substaskDeleteIcon = document.querySelectorAll('.substask-input-wrapper i');
+            // let substaskErrorMessage = document.querySelectorAll('.substask-input-wrapper .newTaskEmptyError');
+        
+            edit_task_subtasks.forEach((substask, index) => {
+                    function removeEachSubstaskError() {
+                        substask.style.border = '1px solid var(--lines)';
+                        edit_substask_delete_icon[index].style.color = 'var(--mediumGrey)';
+                        edit_subtask_error_msg[index].style.display = 'none';
+                        // error = false;
+                    }
+                    substask.addEventListener('keyup', removeEachSubstaskError)
+            })
+
+        }
+        
+
+
+
+        function process_edit_task_form_subtask() {
+            const substaskItems = edit_task_form.querySelectorAll('.edit-substask-input-wrapper');
+            const substasksContainer = edit_task_form.querySelector('.edit-task-substasks');
+            const addSubstaskBtn = edit_task_form.querySelector('.edit-substasks-btn');
+
+
+            // generate random placeholder
+            function shuffle(array) {
+                return [...array].sort(() => Math.random() - 0.5);
+            }
+            let substaskInputPlaceholder = ['e.g. Make tea', 'e.g. Do the boring work', 'e.g. Stay focus'];
+
+
+            let substasksWrapper = document.createElement('div');
+            substasksWrapper.classList.add("edit-substask-input-wrapper");
+
+
+            let substasksInput = document.createElement('input');
+            substasksInput.setAttribute('type', 'text');
+            substasksInput.setAttribute('placeholder', shuffle(substaskInputPlaceholder)[0]);
+            substasksInput.setAttribute('name', 'array[]');
+            substasksInput.setAttribute('autocomplete', 'off');
+
+
+            let deleteSubstaskIcon = document.createElement('i');
+            deleteSubstaskIcon.classList.add('fa-solid');
+            deleteSubstaskIcon.classList.add('fa-xmark');
+
+            let substaskErrorMessage = document.createElement('span');
+            substaskErrorMessage.classList.add('newTaskEmptyError');
+            substaskErrorMessage.innerHTML = "Can't be empty";
+
+            substasksWrapper.appendChild(substasksInput);
+            substasksWrapper.appendChild(deleteSubstaskIcon);
+            substasksWrapper.appendChild(substaskErrorMessage);
+            substasksContainer.appendChild(substasksWrapper);
+
+            // disable button at 3rd substask
+            if(substaskItems.length == 2) {
+                addSubstaskBtn.style.pointerEvents = 'none';
+                addSubstaskBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.559)';
+            } else {
+                addSubstaskBtn.style.pointerEvents = 'initial';
+                addSubstaskBtn.style.backgroundColor = 'white';
+            }
+
+
+            delete_edit_task_form_subtask()
+        }
+
+        edit_subtask_button.addEventListener('click', process_edit_task_form_subtask)
+
+        function delete_edit_task_form_subtask() {
+            const substasksIcons = edit_task_form.querySelectorAll('.edit-substask-input-wrapper i')
+            const substaskItems = edit_task_form.querySelectorAll('.edit-substask-input-wrapper');
+        
+            substasksIcons.forEach((icon, index) => {
+                    icon.addEventListener('click', () => {
+                        if(index !== 0) {
+                            substaskItems[index].remove();
+                        }
+                        return reenable_edit_form_subtask_btn();
+                    })
+            })
+        }
+
+        function reenable_edit_form_subtask_btn() {
+            const substaskItems = edit_task_form.querySelectorAll('.edit-substask-input-wrapper');
+            const addSubstaskBtn = edit_task_form.querySelector('.edit-substasks-btn');
+
+            if(substaskItems.length < 3) {
+                addSubstaskBtn.style.pointerEvents = 'initial';
+                addSubstaskBtn.style.backgroundColor = 'white';
+            }
+        }
+
+
+
+
+
 
     // edit task scripts END
 
