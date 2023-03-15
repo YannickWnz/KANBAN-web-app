@@ -1367,11 +1367,11 @@ const toggleAmendViewTaskWrapper = () => {
     const edit_task_form_bg_overlay = document.querySelector('.edit-task-bg')
     const edit_task_form_wrapper = document.querySelector(".edit-task-form")
     const edit_task_form = document.querySelector(".edit-task-form form")
-    const edit_subtask_button = edit_task_form.querySelector('.edit-substasks-btn')
+    const edit_subtask_button = document.querySelector('.edit-substasks-btn')
     const edit_task_form_title = edit_task_form.querySelector('.edit-task-name input[type=text]')
     const edit_task_form_description = edit_task_form.querySelector('.edit-task-description textarea')
     let edit_task_title_error = edit_task_form.querySelector('.newTaskEmptyError');
-    let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .newTaskEmptyError');
+    let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .editTaskEmptyError');
     const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
     let edit_substask_delete_icon = document.querySelectorAll('.edit-substask-input-wrapper i');
 
@@ -1398,8 +1398,12 @@ const toggleAmendViewTaskWrapper = () => {
 
     
     function process_edit_task_form(e) {
-            let error = false;
             e.preventDefault();
+            let edit_task_title_error = edit_task_form.querySelector('.newTaskEmptyError');
+            let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .editTaskEmptyError');
+            const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
+            let edit_substask_delete_icon = document.querySelectorAll('.edit-substask-input-wrapper i');
+
             if(edit_task_form_title.value.length == 0) {
                 edit_task_form_title.style.border = '1px solid var(--red)';
                 edit_task_title_error.style.display = 'block';  
@@ -1407,41 +1411,24 @@ const toggleAmendViewTaskWrapper = () => {
             }
 
             edit_task_subtasks.forEach((substask, index) => {
-                // if(substask.value.length === 0) {
+
+
                     if(substask.value.length == 0) {
-                    console.log(substask)
+                    // console.log(substask)
                     substask.style.border = '1px solid var(--red)';
                     edit_substask_delete_icon[index].style.color = 'var(--red)';
                     edit_subtask_error_msg[index].style.display = 'block';
-                    // error = true;
 
                     return false;
                 }
             })
-
-            if(edit_task_subtasks.length == 1 && edit_task_subtasks[0].value.length !== 0) {
-                console.log('yooooo')
-            } else if (edit_task_subtasks.length == 2 &&  edit_task_subtasks[1].value.length !== 0) {
-                console.log('yooooo')
-            }
-            
-            // if(error == true) {
-
-                //     return false;
-                // } 
-                
                 
             remove_edit_task_substasks_error()
             
-            // console.log('submitted')
+            console.log('submitted')
         }
 
         edit_task_form.addEventListener('submit', process_edit_task_form)
-
-
-        // let newTaskTitle = document.querySelector('.new-task-name input');
-        // let taskTitleError = document.querySelector('.new-task-name .newTaskEmptyError');
-        // let taskIcon = document.querySelector('.substask-input-wrapper i');
 
 
         function remove_edit_title_error_msg() {
@@ -1452,16 +1439,15 @@ const toggleAmendViewTaskWrapper = () => {
         edit_task_form_title.addEventListener('keyup', remove_edit_title_error_msg)
 
         function remove_edit_task_substasks_error() {
-            // const newTaskSubstasks = document.querySelectorAll('.new-task-substasks .substask-input-wrapper input');
-            // let substaskDeleteIcon = document.querySelectorAll('.substask-input-wrapper i');
-            // let substaskErrorMessage = document.querySelectorAll('.substask-input-wrapper .newTaskEmptyError');
-        
+            const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
+            let edit_substask_delete_icon = document.querySelectorAll('.edit-substask-input-wrapper i');
+            let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .editTaskEmptyError');
+
             edit_task_subtasks.forEach((substask, index) => {
                     function removeEachSubstaskError() {
                         substask.style.border = '1px solid var(--lines)';
                         edit_substask_delete_icon[index].style.color = 'var(--mediumGrey)';
                         edit_subtask_error_msg[index].style.display = 'none';
-                        // error = false;
                     }
                     substask.addEventListener('keyup', removeEachSubstaskError)
             })
@@ -1472,9 +1458,9 @@ const toggleAmendViewTaskWrapper = () => {
 
 
         function process_edit_task_form_subtask() {
-            const substaskItems = edit_task_form.querySelectorAll('.edit-substask-input-wrapper');
-            const substasksContainer = edit_task_form.querySelector('.edit-task-substasks');
-            const addSubstaskBtn = edit_task_form.querySelector('.edit-substasks-btn');
+            const substaskItems = document.querySelectorAll('.edit-substask-input-wrapper');
+            const substasksContainer = document.querySelector('.edit-task-substasks');
+            const addSubstaskBtn = document.querySelector('.edit-substasks-btn');
 
 
             // generate random placeholder
@@ -1500,7 +1486,7 @@ const toggleAmendViewTaskWrapper = () => {
             deleteSubstaskIcon.classList.add('fa-xmark');
 
             let substaskErrorMessage = document.createElement('span');
-            substaskErrorMessage.classList.add('newTaskEmptyError');
+            substaskErrorMessage.classList.add('editTaskEmptyError');
             substaskErrorMessage.innerHTML = "Can't be empty";
 
             substasksWrapper.appendChild(substasksInput);
@@ -1512,12 +1498,10 @@ const toggleAmendViewTaskWrapper = () => {
             if(substaskItems.length == 2) {
                 addSubstaskBtn.style.pointerEvents = 'none';
                 addSubstaskBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.559)';
-            } else {
-                addSubstaskBtn.style.pointerEvents = 'initial';
-                addSubstaskBtn.style.backgroundColor = 'white';
             }
 
 
+            // callback()
             delete_edit_task_form_subtask()
         }
 
