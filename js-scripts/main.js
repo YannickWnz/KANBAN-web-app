@@ -862,17 +862,16 @@ for (let i = 0; i < todoData.length; i++) {
                     selected_task_description = fetcheddata[i].taskDescription;
                     selected_task_subtasks = subtask;
 
+                    update_subtask_wrapper(selected_task_subtasks)
+                    
+
+
                     const amend_task_box_wrapper = document.querySelector('.amend-view-task')
                     const toggle_amend_task_options_btn = document.querySelector('.view-task-title i')
                     const edit_task_btn = document.querySelector('.amend-view-task a:nth-child(1)')
                     const delete_task_btn = document.querySelector('.amend-view-task a:nth-child(2)')
                     const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
                     amend_task_options(edit_task_data)
-                    // amend_task_options(toggle_amend_task_options_btn, amend_task_box_wrapper, edit_task_btn, delete_task_btn)
-                    // testi.addEventListener('click', () => {
-                    //     console.log('clicking it', fetcheddata[i].taskID)
-                    //     testmodal.classList.toggle('display-none')
-                    // })
                     handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     // testedittask()
                 }
@@ -1388,11 +1387,55 @@ const toggleAmendViewTaskWrapper = () => {
     edit_task_form_bg_overlay.addEventListener('click', hide_edit_task_form)
 
     function show_edit_task_form() {
+        const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
+
         edit_task_form_bg_overlay.classList.remove('display-none')
         edit_task_form_wrapper.classList.remove('display-none')
 
         edit_task_form_title.value = selected_task_title
         edit_task_form_description.value = selected_task_description
+
+
+        selected_task_subtasks.forEach((sub, index) => {
+            if(edit_task_subtasks[index]){
+                edit_task_subtasks[index].value = sub
+            }
+        })
+
+    }
+
+    
+    // const edit_task_subtasks_wrapper = document.querySelector('.edit-task-substasks');
+    const edit_task_subtasks_wrapper = document.querySelector('.edit-task-substasks');
+    
+    function update_subtask_wrapper(selected_task_subtasks) {
+        let subtask_input_wrapper = document.querySelectorAll('.edit-substask-input-wrapper')
+        const substaskItems = edit_task_form.querySelectorAll('.edit-substask-input-wrapper');
+
+        if(selected_task_subtasks.length == 1) {
+            if(substaskItems[1]){substaskItems[1].remove()} 
+            if(substaskItems[2]){substaskItems[2].remove()} 
+
+            reenable_edit_form_subtask_btn()
+        }
+        else if(selected_task_subtasks.length == 2) {
+            if(substaskItems[2]){substaskItems[2].remove()} 
+            if(substaskItems.length == 1){
+                process_edit_task_form_subtask();
+            }
+
+            reenable_edit_form_subtask_btn()
+        }
+        else if(selected_task_subtasks.length == 3) {
+            if(substaskItems.length == 1){
+                process_edit_task_form_subtask();
+                process_edit_task_form_subtask();
+            }
+            if(substaskItems.length == 2){
+                process_edit_task_form_subtask();
+            }
+        }
+
 
     }
 
@@ -1460,6 +1503,7 @@ const toggleAmendViewTaskWrapper = () => {
         function process_edit_task_form_subtask() {
             const substaskItems = document.querySelectorAll('.edit-substask-input-wrapper');
             const substasksContainer = document.querySelector('.edit-task-substasks');
+            // const substasksContainer = document.querySelector('.testdiv');
             const addSubstaskBtn = document.querySelector('.edit-substasks-btn');
 
 
