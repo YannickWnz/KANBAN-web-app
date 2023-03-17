@@ -784,7 +784,8 @@ input:checked+.slider:before {
     position: relative;
 }
 
-.substask-input-wrapper .newTaskEmptyError {
+.substask-input-wrapper .newTaskEmptyError,
+.edit-substask-input-wrapper .newTaskEmptyError {
     color: var(--red);
     font-size: .8em;
     position: absolute;
@@ -1060,6 +1061,11 @@ input:checked+.slider:before {
 /* edit board prompt CSS END */
 
 /* edit task prompt CSS START */
+
+.testdiv {
+    /* border: 1px solid darkcyan; */
+}
+
 .edit-task-bg {
     display: block;
     /* z-index: 6; */
@@ -1117,6 +1123,26 @@ input:checked+.slider:before {
 .new-task-name input {
     margin: 10px 0;
 }
+/* 
+.editTaskEmptyError {
+    color: var(--red);
+    font-size: .8em;
+    position: absolute;
+    right: 6px;
+    bottom: 20px;
+    display: none;
+} */
+
+
+.edit-substask-input-wrapper .editTaskEmptyError {
+    color: var(--red);
+    font-size: .8em;
+    position: absolute;
+    right: 50px;
+    bottom: 10px;
+    display: none;
+}
+
 
 .edit-task-form textarea {
     width: 100%;
