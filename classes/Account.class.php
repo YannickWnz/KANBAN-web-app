@@ -157,4 +157,29 @@ class Account {
         }
     }
 
+    public function updateTaskData($taskID, $taskTitle, $taskDescription, $subtasks, $completeSubtask, $taskStatus) {
+        $query = $this->con->prepare('UPDATE task SET taskTitle = :title, taskDescription = :description, substasks = :sub, completedSubtasks = :completedsub, taskStatus = :status WHERE taskID = :id');
+        $query->bindValue(':title', $taskTitle);
+        $query->bindValue(':description', $taskDescription);
+        $query->bindValue(':sub', $subtasks);
+        $query->bindValue(':completedsub', $completeSubtask);
+        $query->bindValue(':status', $taskStatus);
+        $query->bindValue(':id', $taskID);
+
+        $query->execute();
+
+        if($query) {
+            echo "Task successfully updated";
+        }
+    }
+
+    public function deleteTask($taskID) {
+        $query = $this->con->prepare('DELETE FROM task WHERE taskID = :taskID');
+        $query->bindValue(':taskID', $taskID);
+        $query->execute();
+        if($query) {
+            echo "Task deleted successfully";
+        }
+    }
+
 }
