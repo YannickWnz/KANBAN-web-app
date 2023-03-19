@@ -174,6 +174,8 @@ const getBoardNumber = () => {
 
 getBoardNumber();
 
+let selected_board_index = '';
+
 // active active board when board is clicked
 function handleActiveBoard() {
     // emptyBoardContent();
@@ -208,6 +210,8 @@ function handleActiveBoard() {
 
                 // pass index to fetchTaskData function
                 fetchTaskData(index);
+
+                selected_board_index = index;
             }
         }
         content.addEventListener('click', activeBoard);
@@ -774,6 +778,7 @@ let selected_task_id = '';
 let selected_task_title = '';
 let selected_task_description = '';
 let selected_task_subtasks = '';
+let selected_task_status = '';
 
 // display todo task infos onclick SCRIPTS START
 const displayTodoTasksInfosOnClick = (todoTasks, boardid) => {
@@ -790,7 +795,6 @@ for (let i = 0; i < todoData.length; i++) {
     function clicked() {
         showViewTaskModal()
             let req = new XMLHttpRequest();
-            // req.open('GET', './getboardname.class.php', true);
             req.open('GET', './include/fetchTodoTask.inc.php?bid='+boardid, true);
             req.onload = function() {
                 if(this.status === 200) {
@@ -861,10 +865,10 @@ for (let i = 0; i < todoData.length; i++) {
                     selected_task_title = fetcheddata[i].taskTitle;
                     selected_task_description = fetcheddata[i].taskDescription;
                     selected_task_subtasks = subtask;
+                    selected_task_status = fetcheddata[i].taskStatus;
 
                     update_subtask_wrapper(selected_task_subtasks)
                     
-
 
                     const amend_task_box_wrapper = document.querySelector('.amend-view-task')
                     const toggle_amend_task_options_btn = document.querySelector('.view-task-title i')
@@ -872,6 +876,7 @@ for (let i = 0; i < todoData.length; i++) {
                     const delete_task_btn = document.querySelector('.amend-view-task a:nth-child(2)')
                     const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
                     amend_task_options(edit_task_data)
+
                     handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     // testedittask()
                 }
@@ -957,13 +962,23 @@ let doingData = Array.from(doingTasks);
                             `
 
                         viewTaskModal.innerHTML = output;
+
                         selected_task_id = fetcheddata[i].taskID;
                         selected_task_title = fetcheddata[i].taskTitle;
+                        selected_task_description = fetcheddata[i].taskDescription;
                         selected_task_subtasks = subtask;
+                        selected_task_status = fetcheddata[i].taskStatus;
+    
+                        update_subtask_wrapper(selected_task_subtasks)
+                        
+    
+                        const amend_task_box_wrapper = document.querySelector('.amend-view-task')
+                        const toggle_amend_task_options_btn = document.querySelector('.view-task-title i')
+                        const edit_task_btn = document.querySelector('.amend-view-task a:nth-child(1)')
+                        const delete_task_btn = document.querySelector('.amend-view-task a:nth-child(2)')
+                        const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
+                        amend_task_options(edit_task_data)
 
-                        const testmodal = document.querySelector('.amend-view-task')
-                        const testi = document.querySelector('.view-task-title i')
-                        testingthing(testmodal, testi)
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
                     }
 
@@ -1047,6 +1062,23 @@ let doneTaskData = Array.from(donetasks);
 
                         viewTaskModal.innerHTML = output;
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
+
+
+                        selected_task_id = fetcheddata[i].taskID;
+                        selected_task_title = fetcheddata[i].taskTitle;
+                        selected_task_description = fetcheddata[i].taskDescription;
+                        selected_task_subtasks = subtask;
+                        selected_task_status = fetcheddata[i].taskStatus;
+    
+                        update_subtask_wrapper(selected_task_subtasks)
+                        
+    
+                        const amend_task_box_wrapper = document.querySelector('.amend-view-task')
+                        const toggle_amend_task_options_btn = document.querySelector('.view-task-title i')
+                        const edit_task_btn = document.querySelector('.amend-view-task a:nth-child(1)')
+                        const delete_task_btn = document.querySelector('.amend-view-task a:nth-child(2)')
+                        const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
+                        amend_task_options(edit_task_data)
                     }
 
                 }
@@ -1129,6 +1161,23 @@ let onHoldTaskData = Array.from(onHoldtasks);
 
                         viewTaskModal.innerHTML = output;
                         handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
+
+
+                        selected_task_id = fetcheddata[i].taskID;
+                        selected_task_title = fetcheddata[i].taskTitle;
+                        selected_task_description = fetcheddata[i].taskDescription;
+                        selected_task_subtasks = subtask;
+                        selected_task_status = fetcheddata[i].taskStatus;
+    
+                        update_subtask_wrapper(selected_task_subtasks)
+                        
+    
+                        const amend_task_box_wrapper = document.querySelector('.amend-view-task')
+                        const toggle_amend_task_options_btn = document.querySelector('.view-task-title i')
+                        const edit_task_btn = document.querySelector('.amend-view-task a:nth-child(1)')
+                        const delete_task_btn = document.querySelector('.amend-view-task a:nth-child(2)')
+                        const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
+                        amend_task_options(edit_task_data)
                     }
 
                 }
@@ -1329,39 +1378,73 @@ const toggleAmendViewTaskWrapper = () => {
 
     
 
-        const amend_task_box_btn = document.querySelector('.view-task-title i')
-        const amend_task_box = document.querySelector('.amend-view-task')
+    const amend_task_box_btn = document.querySelector('.view-task-title i')
+    const amend_task_box = document.querySelector('.amend-view-task')
 
 
-        function toggle_amend_task_box() {
-            amend_task_box.classList.toggle('display-none')
+    function toggle_amend_task_box() {
+        amend_task_box.classList.toggle('display-none')
+    }
+
+    function amend_task_options(edit_task_data) {
+        const {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn} = edit_task_data
+        
+        toggle_amend_task_options_btn.addEventListener('click', () => {
+            amend_task_box_wrapper.classList.toggle('display-none')
+        })
+
+        edit_task_btn.addEventListener('click', show_edit_task_form)
+
+        delete_task_btn.addEventListener('click', show_delete_task_confirmation_prompt)
+
+    }
+
+    const delete_task_btn = document.querySelector('.delete-task-btn-options .delete')
+    function delete_task() {
+        console.log(selected_task_id)
+        
+        let delete_task_request = new XMLHttpRequest();
+        delete_task_request.open('GET', './include/deleteTask.inc.php?taskID='+selected_task_id, true)
+        delete_task_request.onload = function() {
+            if(this.status == 200 && this.readyState == 4) {
+                console.log(this.responseText)
+                
+                fetchTaskData(selected_board_index)
+                hide_delete_task_confirmation_prompt()
+                hide_edit_task_form()
+                hideViewTaskModal()
+            }
         }
-
-        function amend_task_options(edit_task_data) {
-            const {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn} = edit_task_data
-            
-            toggle_amend_task_options_btn.addEventListener('click', () => {
-                amend_task_box_wrapper.classList.toggle('display-none')
-            })
-
-            edit_task_btn.addEventListener('click', show_edit_task_form)
-
-            // console.log(edit_task_btn, delete_task_btn)
-
-        }
+        delete_task_request.send()
+    }
+    delete_task_btn.addEventListener('click', delete_task)
 
 
+    function show_delete_task_confirmation_prompt() {
+        const delete_task_bg_overlay = document.querySelector('.delete-task-bg-overlay')
+        const delete_task_prompt = document.querySelector('.delete-task-prompt')
 
-        function runEdit() {
-            console.log('edit...')
-        }
+        delete_task_bg_overlay.classList.remove('display-none')
+        delete_task_prompt.classList.remove('display-none')
 
-        function testingthing(a, b) {
-            console.log(a, b, selected_task_title, selected_task_subtasks)
-            b.addEventListener('click', () => {
-                console.log('we pimpin nigga')
-            })
-        }
+    }
+
+    function hide_delete_task_confirmation_prompt() {
+        const delete_task_bg_overlay = document.querySelector('.delete-task-bg-overlay')
+        const delete_task_prompt = document.querySelector('.delete-task-prompt')
+
+        delete_task_bg_overlay.classList.add('display-none')
+        delete_task_prompt.classList.add('display-none')
+
+        hide_edit_task_form()
+        hideViewTaskModal()
+    }
+
+    function cancel_delete_task() {
+        const cancel_btn = document.querySelector('.delete-task-btn-options .cancel')
+        cancel_btn.addEventListener('click', hide_delete_task_confirmation_prompt)
+    }
+    cancel_delete_task()
 
     const edit_task_form_bg_overlay = document.querySelector('.edit-task-bg')
     const edit_task_form_wrapper = document.querySelector(".edit-task-form")
@@ -1373,11 +1456,12 @@ const toggleAmendViewTaskWrapper = () => {
     let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .editTaskEmptyError');
     const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
     let edit_substask_delete_icon = document.querySelectorAll('.edit-substask-input-wrapper i');
+    let edit_task_form_status = edit_task_form.querySelector('#edited_task_status').value
 
 
-
-
-
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
 
     function hide_edit_task_form() {
@@ -1387,6 +1471,8 @@ const toggleAmendViewTaskWrapper = () => {
     edit_task_form_bg_overlay.addEventListener('click', hide_edit_task_form)
 
     function show_edit_task_form() {
+        let edit_task_form_status = document.querySelector('#edited_task_status').value
+
         const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
 
         edit_task_form_bg_overlay.classList.remove('display-none')
@@ -1394,7 +1480,7 @@ const toggleAmendViewTaskWrapper = () => {
 
         edit_task_form_title.value = selected_task_title
         edit_task_form_description.value = selected_task_description
-
+        edit_task_form_status = selected_task_status
 
         selected_task_subtasks.forEach((sub, index) => {
             if(edit_task_subtasks[index]){
@@ -1405,7 +1491,6 @@ const toggleAmendViewTaskWrapper = () => {
     }
 
     
-    // const edit_task_subtasks_wrapper = document.querySelector('.edit-task-substasks');
     const edit_task_subtasks_wrapper = document.querySelector('.edit-task-substasks');
     
     function update_subtask_wrapper(selected_task_subtasks) {
@@ -1435,17 +1520,17 @@ const toggleAmendViewTaskWrapper = () => {
                 process_edit_task_form_subtask();
             }
         }
-
-
     }
-
     
     function process_edit_task_form(e) {
             e.preventDefault();
+            const edit_task_form = document.querySelector(".edit-task-form form")
             let edit_task_title_error = edit_task_form.querySelector('.newTaskEmptyError');
             let edit_subtask_error_msg = edit_task_form.querySelectorAll('.edit-substask-input-wrapper .editTaskEmptyError');
             const edit_task_subtasks = document.querySelectorAll('.edit-task-substasks .edit-substask-input-wrapper input');
             let edit_substask_delete_icon = document.querySelectorAll('.edit-substask-input-wrapper i');
+            const edit_task_form_description = edit_task_form.querySelector('.edit-task-description textarea')
+            let edit_task_form_status = edit_task_form.querySelector('#edited_task_status').value
 
             if(edit_task_form_title.value.length == 0) {
                 edit_task_form_title.style.border = '1px solid var(--red)';
@@ -1455,9 +1540,7 @@ const toggleAmendViewTaskWrapper = () => {
 
             edit_task_subtasks.forEach((substask, index) => {
 
-
                     if(substask.value.length == 0) {
-                    // console.log(substask)
                     substask.style.border = '1px solid var(--red)';
                     edit_substask_delete_icon[index].style.color = 'var(--red)';
                     edit_subtask_error_msg[index].style.display = 'block';
@@ -1465,10 +1548,46 @@ const toggleAmendViewTaskWrapper = () => {
                     return false;
                 }
             })
+
+            const edited_data = {
+                edit_task_title: edit_task_form_title.value,
+                edit_task_description: edit_task_form_description.value,
+                edit_task_status: edit_task_form_status,
+            }
+
+            if(edit_task_subtasks.length == 1 && edit_task_subtasks[0].value.length !== 0) {
+                const edited_subtasks = {
+                    edit_task_subtask1: edit_task_subtasks[0].value
+                }
+                get_edited_task_data(edited_data, edited_subtasks)
+                
+                hide_edit_task_form()
+                hideViewTaskModal()
+            } 
+            else if (edit_task_subtasks.length == 2 &&  edit_task_subtasks[1].value.length !== 0) {
+                const edited_subtasks = {
+                    edit_task_subtask1: edit_task_subtasks[0].value, 
+                    edit_task_subtask2: edit_task_subtasks[1].value
+                }
+                get_edited_task_data(edited_data, edited_subtasks)
+
+                hide_edit_task_form()
+                hideViewTaskModal()
+            } 
+            else if(edit_task_subtasks.length == 3 &&  edit_task_subtasks[1].value.length !== 0 && edit_task_subtasks[2].value.length !== 0) {
+                const edited_subtasks = {
+                    edit_task_subtask1: edit_task_subtasks[0].value, 
+                    edit_task_subtask2: edit_task_subtasks[1].value,
+                    edit_task_subtask3: edit_task_subtasks[2].value
+                }
+                get_edited_task_data(edited_data, edited_subtasks);
+                
+                hide_edit_task_form()
+                hideViewTaskModal()
+            }
                 
             remove_edit_task_substasks_error()
-            
-            console.log('submitted')
+            edit_task_form.reset()
         }
 
         edit_task_form.addEventListener('submit', process_edit_task_form)
@@ -1497,15 +1616,10 @@ const toggleAmendViewTaskWrapper = () => {
 
         }
         
-
-
-
         function process_edit_task_form_subtask() {
             const substaskItems = document.querySelectorAll('.edit-substask-input-wrapper');
             const substasksContainer = document.querySelector('.edit-task-substasks');
-            // const substasksContainer = document.querySelector('.testdiv');
             const addSubstaskBtn = document.querySelector('.edit-substasks-btn');
-
 
             // generate random placeholder
             function shuffle(array) {
@@ -1544,8 +1658,6 @@ const toggleAmendViewTaskWrapper = () => {
                 addSubstaskBtn.style.backgroundColor = 'rgba(255, 255, 255, 0.559)';
             }
 
-
-            // callback()
             delete_edit_task_form_subtask()
         }
 
@@ -1575,9 +1687,36 @@ const toggleAmendViewTaskWrapper = () => {
             }
         }
 
+        const get_edited_task_data = (edited_data, edited_subtasks) => {
+            const {edit_task_title, edit_task_description, edit_task_status} = edited_data;
+            let {edit_task_subtask1, edit_task_subtask2, edit_task_subtask3} = edited_subtasks
+        
+            // set substask 2 to empty string if not undefined
+            if(edit_task_subtask2 == undefined) {
+                edit_task_subtask2 = '';
+            }
+        
+            // set substask 3 to empty string if not undefined
+            if(edit_task_subtask3 == undefined) {
+                edit_task_subtask3 = '';
+            }
 
+            let update_task_data_request = new XMLHttpRequest();
+            update_task_data_request.open('POST', './include/updatetaskdata.inc.php', true);
+            update_task_data_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
+            update_task_data_request.onload = function() {
+                console.log(this.responseText)
+                fetchTaskData(selected_board_index)
+            }
 
+            const updatedData = {edit_task_title, edit_task_description, edit_task_status, edit_task_subtask1, edit_task_subtask2, edit_task_subtask3, selected_task_id}
+
+            const updatedJsonData = JSON.stringify(updatedData)
+
+            update_task_data_request.send(updatedJsonData)
+
+        }
 
 
     // edit task scripts END
