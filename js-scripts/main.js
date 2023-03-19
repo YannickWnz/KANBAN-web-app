@@ -105,7 +105,8 @@ const handleNewBoard = () => {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
     xhr.onload = () => {
-
+        handle_confirmation_message(xhr.responseText) 
+        // handle_confirmation_message("working") 
         // call get board function to display boards and number of total board on load
         getBoard();
         getBoardNumber();
@@ -120,6 +121,7 @@ const handleNewBoard = () => {
     xhr.send(jsonData);
 
     addBoardForm.reset();
+    hideAddNewBoardModal()
     return false;
 }
 
@@ -345,12 +347,15 @@ const newTaskValue = () => {
     if(newTaskSubstasks.length == 1 && newTaskSubstasks[0].value.length !== 0) {
         collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus, newTaskSubstasks[0].value)
         newTaskForm.reset();
+        hideAddNewTaskModal()
     } else if (newTaskSubstasks.length == 2 &&  newTaskSubstasks[1].value.length !== 0) {
         collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus, newTaskSubstasks[0].value, newTaskSubstasks[1].value)
         newTaskForm.reset();
+        hideAddNewTaskModal()
     } else if(newTaskSubstasks.length == 3 &&  newTaskSubstasks[1].value.length !== 0 && newTaskSubstasks[2].value.length !== 0) {
         collectTaskElements(newTaskTitleValue, taskDescriptionValue, taskStatus, newTaskSubstasks[0].value, newTaskSubstasks[1].value, newTaskSubstasks[2].value);
         newTaskForm.reset();
+        hideAddNewTaskModal()
     }
 
     // newTaskForm.reset();
@@ -459,7 +464,8 @@ function insertNewTask(data) {
 
             xhr.onload = () => {
                 // log response message in console if there is any
-                console.log(xhr.responseText);
+
+                handle_confirmation_message(xhr.responseText) 
 
                 // call fetchTaskData function after post request with board index to automatically update the DOM with the new data
                 fetchTaskData(data.selectedBoardIndex)
@@ -538,6 +544,7 @@ function fetchTaskData(index) {
 
             // set current board name to board name fetched from the db   
             currentBoardName = boardName;
+            show_board_name_in_header(currentBoardName)
             // set current board id to board id fetched from the db   
             currentBoardID = boardId;
             
@@ -691,7 +698,7 @@ function updateSubtasksInputCheckbox(taskID, inputIndex, taskIndex, taskStatus) 
         if(this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(xml.responseText)
             let myarr = JSON.parse(data[0].completedSubtasks) 
-            // myarr[idx] = 'true';
+
             if(myarr[inputIndex] == 'false') {
                 myarr[inputIndex] = 'true';
             } else {
@@ -719,7 +726,7 @@ function updateSubtasksInputCheckbox(taskID, inputIndex, taskIndex, taskStatus) 
                         let subLength = completedSubtasks.length
                         output += `${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength} substasks`
                         output2 += `Subtasks (${returnCompletedSubtaskLength(completedSubtasks)} of ${subLength})`
-                        // console.log(output)
+
                         tasksWrapper[taskIndex].innerHTML = output;
                         viewTaskSubtask.innerHTML = output2;
                     }
@@ -742,8 +749,6 @@ function handleSubtaskCheckboxChange(taskID, taskIndex, taskStatus) {
     
     let subtaskInputs = Array.from(subtaskInputCheckbox)
     let subtaskContents = Array.from(subtaskTextContent)
-    
-    // console.log(subtaskInputs)
 
     subtaskInputs.forEach((input, index) => {
         input.addEventListener('click', () => {
@@ -800,7 +805,6 @@ for (let i = 0; i < todoData.length; i++) {
                 if(this.status === 200) {
 
                     let fetcheddata = JSON.parse(req.responseText);
-                    // console.log(fetcheddata[i].taskStatus);
 
                     let taskStatus = fetcheddata[i].taskStatus;
 
@@ -860,6 +864,7 @@ for (let i = 0; i < todoData.length; i++) {
                         `
 
                     viewTaskModal.innerHTML = output;
+                    handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
 
                     selected_task_id = fetcheddata[i].taskID;
                     selected_task_title = fetcheddata[i].taskTitle;
@@ -877,8 +882,6 @@ for (let i = 0; i < todoData.length; i++) {
                     const edit_task_data = {amend_task_box_wrapper, toggle_amend_task_options_btn, edit_task_btn, delete_task_btn}
                     amend_task_options(edit_task_data)
 
-                    handleSubtaskCheckboxChange(fetcheddata[i].taskID, i, taskStatus)
-                    // testedittask()
                 }
             }
             req.send();
@@ -1242,19 +1245,21 @@ const toggleAmendViewTaskWrapper = () => {
 
 
 
-    // Show edith or delete board box function START
+    // Show edit or delete board box function START
     let deleteBoardBtn = document.querySelector('.amend-board-box a:nth-child(2)')
     function showEditOrDeleteBoardBox() {
 
         const deleteBoardBgOverlay = document.querySelector('.delete-board-bg-overlay')
         const deleteBoardPrompt = document.querySelector('.delete-board-prompt')
+        const delete_board_text = document.querySelector('.delete-board-prompt p')
         hideAmendBoardBox()
         deleteBoardBgOverlay.classList.remove('display-none')
         deleteBoardPrompt.classList.remove('display-none')
+        delete_board_text.innerHTML = `Are you sure you want to delete '${currentBoardName}' board? This action will remove all columns and tasks and cannot be reserved.`
 
     }
     deleteBoardBtn.addEventListener('click', showEditOrDeleteBoardBox)
-    // Show edith or delete board box function END
+    // Show edit or delete board box function END
 
 
     // cancel delete board function START
@@ -1288,7 +1293,8 @@ const toggleAmendViewTaskWrapper = () => {
                             serverDeleteRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
                             serverDeleteRequest.onload = function() {
                                 if(this.status === 200 && this.readyState == 4) {
-                                    console.log(this.responseText)
+                                    // console.log(this.responseText)
+                                    handle_confirmation_message(this.responseText) 
                                     getBoard();
                                     getBoardNumber();
                                 }
@@ -1337,7 +1343,9 @@ const toggleAmendViewTaskWrapper = () => {
         request_to_change_board_name.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
         request_to_change_board_name.onload = function() {
             if(this.status == 200 && this.readyState == 4) {
-                console.log(this.responseText)
+                // console.log(this.responseText)
+                handle_confirmation_message(this.responseText) 
+
                 getBoard();
             }
         }
@@ -1399,15 +1407,17 @@ const toggleAmendViewTaskWrapper = () => {
 
     }
 
+    // delete task SCRIPT START
     const delete_task_btn = document.querySelector('.delete-task-btn-options .delete')
     function delete_task() {
-        console.log(selected_task_id)
+        // console.log(selected_task_id)
         
         let delete_task_request = new XMLHttpRequest();
         delete_task_request.open('GET', './include/deleteTask.inc.php?taskID='+selected_task_id, true)
         delete_task_request.onload = function() {
             if(this.status == 200 && this.readyState == 4) {
-                console.log(this.responseText)
+                // console.log(this.responseText)
+                handle_confirmation_message(this.responseText) 
                 
                 fetchTaskData(selected_board_index)
                 hide_delete_task_confirmation_prompt()
@@ -1423,9 +1433,11 @@ const toggleAmendViewTaskWrapper = () => {
     function show_delete_task_confirmation_prompt() {
         const delete_task_bg_overlay = document.querySelector('.delete-task-bg-overlay')
         const delete_task_prompt = document.querySelector('.delete-task-prompt')
+        const delete_task_text = document.querySelector('.delete-task-prompt p')
 
         delete_task_bg_overlay.classList.remove('display-none')
         delete_task_prompt.classList.remove('display-none')
+        delete_task_text.innerHTML = `Are you sure you want to delete '${selected_task_title}' task and its subtasks? This action cannot be reversed.`
 
     }
 
@@ -1445,6 +1457,8 @@ const toggleAmendViewTaskWrapper = () => {
         cancel_btn.addEventListener('click', hide_delete_task_confirmation_prompt)
     }
     cancel_delete_task()
+    // delete task SCRIPT END
+
 
     const edit_task_form_bg_overlay = document.querySelector('.edit-task-bg')
     const edit_task_form_wrapper = document.querySelector(".edit-task-form")
@@ -1706,7 +1720,8 @@ const toggleAmendViewTaskWrapper = () => {
             update_task_data_request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             update_task_data_request.onload = function() {
-                console.log(this.responseText)
+                handle_confirmation_message(this.responseText) 
+
                 fetchTaskData(selected_board_index)
             }
 
@@ -1720,5 +1735,40 @@ const toggleAmendViewTaskWrapper = () => {
 
 
     // edit task scripts END
+
+
+    // handling confirmation message SCRIPT START
+    const confirmation_msg = document.querySelector('.confirmation-message')
+    const confirmation_msg_text = document.querySelector('.confirmation-message p')
+
+    function show_confirmation_message() {
+        confirmation_msg.classList.add('show-msg')
+    }
+
+    function hide_confirmation_message() {
+        confirmation_msg.classList.remove('show-msg')
+    }
+
+    function handle_confirmation_message(message) {
+        if(message) {
+            // console.log(message)
+            confirmation_msg_text.innerHTML = message
+            show_confirmation_message()
+            const confirmation_msg_timing = setTimeout(hide_confirmation_message, 3500)
+        }
+    }
+
+    function show_board_name_in_header(boardname) {
+        if(boardname) {
+            const header_board_name = document.querySelector('.nav-contents h1')
+            header_board_name.innerHTML = boardname
+        }
+    }
+
+
+
+    // const confirmation_msg_timing = setTimeout(hide_confirmation_message, 5000)
+
+    // handling confirmation message SCRIPT END
 
 
