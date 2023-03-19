@@ -182,8 +182,6 @@ if(!isset($_SESSION['visited'])) {
                   <option value="doing">Doing</option>
                   <option value="done">Done</option>
                   <option value="on-hold">On-Hold</option>
-                  <!-- <option value="opel">Opel</option> -->
-                  <!-- <option value="audi">Audi</option> -->
                 </select>
               </div>
             </div>
@@ -257,8 +255,8 @@ if(!isset($_SESSION['visited'])) {
           <!-- delete board prompt END -->
 
           <!-- edit task prompt START -->
-          <div class="edit-task-bg-overlay edit-task-bg"></div>
-          <div class="edit-task-form">
+          <div class="edit-task-bg-overlay edit-task-bg display-none"></div>
+          <div class="edit-task-form display-none">
             <form class="edit-task-form" onsubmit="">
               <p>Edit Task</p>
               <div class="edit-task-name">
@@ -272,11 +270,12 @@ if(!isset($_SESSION['visited'])) {
               </div>
               <div class="edit-task-substasks">
                 <label for="task-substasks">Substasks</label><br>
-                <div class="edit-substask-input-wrapper">
-                  <input type="text" autocomplete="off" name="array[]" placeholder="e.g. Make coffee">
-                  <i class="fa-solid fa-xmark"></i>
-                  <span class="newTaskEmptyError">Can't be empty</span>
-                </div>
+                  <div class="edit-substask-input-wrapper">
+                    <input type="text" autocomplete="off" name="array[]" placeholder="e.g. Make coffee">
+                    <i class="fa-solid fa-xmark"></i>
+                    <span class="editTaskEmptyError">Can't be empty</span>
+                    <!-- <span class="newTaskEmptyError">Can't be empty</span> -->
+                  </div>
               </div>
               <div class="edit-substasks-btn" onclick="">
                 <i class="fa-solid fa-plus"></i>
@@ -284,9 +283,9 @@ if(!isset($_SESSION['visited'])) {
               </div>
               <div class="edit-task-status">
                 <label for="task-status">Status</label>
-                <div class="status-options">
-                  <select id="task-status">
-                    <option value="todo">Todo</option>
+                <div class="status-options options">
+                  <select id="edited_task_status">
+                    <option value="todo" selected>Todo</option>
                     <option value="doing">Doing</option>
                     <option value="done">Done</option>
                     <option value="on-hold">On-Hold</option>
@@ -299,6 +298,18 @@ if(!isset($_SESSION['visited'])) {
             </form>
           </div>
           <!-- edit task prompt END -->
+
+          <!-- delete task prompt START -->
+          <div class="delete-task-bg-overlay display-none"></div>
+          <div class="delete-task-prompt display-none">
+            <h3>Delete this task?</h3>
+            <p>Are you sure you want to delete 'Platform Launch' board? This action will remove all columns and tasks and cannot be reserved.</p>
+            <div class="delete-task-btn-options">
+              <button class="delete">Delete</button>
+              <button class="cancel">Cancel</button>
+            </div>
+          </div>
+          <!-- delete task prompt END -->
 
         </div>
       </div>
