@@ -1248,6 +1248,71 @@ input:checked+.slider:before {
 
 /* edit task prompt CSS END */
 
+/* delete task prompt CSS START */
+.delete-task-bg-overlay {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.683);
+    z-index: 5;
+}
+
+.delete-task-prompt {
+    width: 450px;
+    min-height: 200px;
+    background-color: var(--darkGrey);
+    border-radius: 5px;
+    padding: 30px;
+    position: absolute;
+    top: 50%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    /* display: none; */
+}
+
+.delete-task-prompt h3 {
+    color: var(--red);
+}
+
+.delete-task-prompt p {
+    color: var(--mediumGrey);
+    font-size: .9em;
+    line-height: 1.7;
+    margin: 20px 0;
+}
+
+.delete-task-btn-options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-task-btn-options button {
+    flex: 1;
+    max-width: 48%;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.delete-task-btn-options button:nth-child(1) {
+    color: white;
+    font-weight: bold;
+    background-color: var(--red);
+}
+
+.delete-task-btn-options button:nth-child(2) {
+    color: var(--main-purple);
+    font-weight: bold;
+    background-color: white;
+}
+/* delete task prompt CSS END */
+
 
 
 /* board content custom style END */
