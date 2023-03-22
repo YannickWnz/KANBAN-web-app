@@ -1,6 +1,8 @@
 <?php
 
 class Sanitize {
+
+    private $errorArray = array();
     
     public static function sanitizeInput($input) {
         if(strlen($input) == 0) {
@@ -32,8 +34,6 @@ class Sanitize {
 
     public static function sanitizeId($id) {
         $id = str_replace( array( '\'', '"', ',', ';', '<', '>', '*', '`', '=', '?', '!', '-', '.' ), ' ', $id);
-        // $id = FILTER_SANITIZE_NUMBER_INT($id);
-        // $id = FILTER_SANITIZE_NUMBER_INT($id);
         $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
         if(strlen($id) > 11) {
             $id = substr($id, 0, 11);
@@ -42,12 +42,15 @@ class Sanitize {
     }
 
     public static function sanitizeArrayInput($arrayInput) {
-
         foreach($arrayInput as $key => $value) {
             $result[$key] = htmlspecialchars($value);
             return $result;
         }
+    }
 
+    public static function sanitize_password($password){
+        $password = strip_tags($password);
+        return $password;
     }
 
 
