@@ -1313,6 +1313,44 @@ input:checked+.slider:before {
 }
 /* delete task prompt CSS END */
 
+/* confirmation message prompt CSS START */
+.confirmation-message {
+    width: 240px;
+    min-height: 80px;
+    border-radius: 7px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* position: absolute; */
+    position: fixed;
+    right: 20px;
+    right: -100%;
+    transition: .5s ease-in-out;
+    top: 200px;
+    z-index: 5;
+    background-color: #49C4E5;
+    background-color: var(--main-purple);
+    color: white;
+}
+
+.show-msg {
+    right: 20px;
+    transition: .5s ease-in-out;
+}
+
+.confirmation-message p {
+    font-size: 1em;
+    text-align: center;
+    /* font-weight: bold; */
+}
+
+.confirmation-container {
+
+}
+
+/* confirmation message prompt CSS END */
+
 
 
 /* board content custom style END */
