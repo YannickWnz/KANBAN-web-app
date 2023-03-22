@@ -1280,14 +1280,14 @@ const toggleAmendViewTaskWrapper = () => {
             
             createdBoardContents.forEach((board, index) => {
                 if(board.classList.contains('active-board')) {
-                    console.log(index)
+                    // console.log(index)
                     let xml = new XMLHttpRequest();
                     xml.open('GET', './getboardname.class.php', true);
                     xml.onload = function() {
                         if(this.readyState == 4 && this.status == 200) {
                             let results = JSON.parse(this.responseText)
                             let boardID = results[index].boardID
-                            console.log(boardID)
+                            // console.log(boardID)
                             let serverDeleteRequest = new XMLHttpRequest();
                             serverDeleteRequest.open('POST', './include/deleteBoard.inc.php', true)
                             serverDeleteRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
