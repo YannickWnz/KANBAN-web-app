@@ -64,7 +64,7 @@ if(!isset($_SESSION['visited'])) {
               <img src="./starter-code/assets/logo-light.svg" alt="">
             </div>
             <div class="nav-contents">
-              <h1>Platform Launch</h1>
+              <h1></h1>
               <div class="newTaskBtnWrapper">
                 <button disabled><i class="fa-solid fa-plus"></i> Add New Task</button>
                 <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -310,6 +310,14 @@ if(!isset($_SESSION['visited'])) {
             </div>
           </div>
           <!-- delete task prompt END -->
+
+          <!-- confirmation message START -->
+          <div class="confirmation-message">
+            <!-- <div class="confirmation-container"> -->
+              <p>Your task has been updated</p>
+            <!-- </div> -->
+          </div>
+          <!-- confirmation message END -->
 
         </div>
       </div>
