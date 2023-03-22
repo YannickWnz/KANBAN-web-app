@@ -15,6 +15,9 @@ class Account {
         $query->bindValue(':name', $board);
         $query->bindValue(':uniqid', $boardUniqID);
         $query->execute();
+        if($query) {
+            echo "Board successfully added";
+        }
     }
 
     // insert task details into task table
@@ -28,6 +31,10 @@ class Account {
         $query->bindValue(':id', $boardId);
 
         $query->execute();
+
+        if($query) {
+            echo "Task successfully added";
+        }
     }
 
     // public function insertTasks($boardId, $taskTitle, $taskDescription, $taskStatus, $taskUniqID) {
@@ -144,6 +151,10 @@ class Account {
         $query = $this->con->prepare('DELETE FROM board WHERE boardID = :boardID');
         $query->bindValue(':boardID', $boardID);
         $query->execute();
+
+        if($query) {
+            echo "Board successfully deleted";
+        }
     }
 
     public function editBoardName($boardID, $newBoardName) {
@@ -174,6 +185,7 @@ class Account {
     }
 
     public function deleteTask($taskID) {
+        $result = '';
         $query = $this->con->prepare('DELETE FROM task WHERE taskID = :taskID');
         $query->bindValue(':taskID', $taskID);
         $query->execute();
