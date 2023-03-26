@@ -60,11 +60,23 @@ class RegisterUser {
         if(!$query) {
             array_push($this->errorArray, Constants::$error);
         } else {
-            // echo 'user registered successfully';
-            $_SESSION['user'] = $username;
-            echo $_SESSION['user'];
+
+            $_SESSION['username'] = $username;
+            if($this->fetchUserID($username)) {
+                header('location: index.php');
+            }
+
         }
 
+    }
+
+    private function fetchUserID($username) {
+        $fetchUserID = $this->con->prepare('SELECT userID FROM users WHERE username = :name');
+        $fetchUserID->bindValue(':name', $username);
+        $fetchUserID->execute();
+        $result = $fetchUserID->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['userID'] = $result['userID'];
+        return $_SESSION['userID'];
     }
 
     private function check_empty_input($username, $password, $password2) {
