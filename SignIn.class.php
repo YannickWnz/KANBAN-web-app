@@ -18,17 +18,21 @@ class SignIn {
 
 
     private function checkUser($username, $password) {
-        // $pwd = hash("sha512", $password);
+        $pwd = hash("sha512", $password);
 
-        $query= $this->con->prepare('SELECT username, password FROM users WHERE username = :user AND password = :password ');
+        $query= $this->con->prepare('SELECT * FROM users WHERE username = :user AND password = :password ');
         $query->bindValue(':user', $username);
-        $query->bindValue(':password', $password);
+        $query->bindValue(':password', $pwd);
         $query->execute();
 
         if($query->rowCount() == 1) {
             echo 'user logged in successfully';
-            $_SESSION['user'] = $username;
-            echo $_SESSION['user'];
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['userID'] = $result['userID'];
+            $_SESSION['username'] = $result['username'];
+            if(isset($_SESSION['userID']) && isset($_SESSION['username']) ) {
+                header('location: index.php');
+            }
         } else {
             array_push($this->errorArray, Constants::$invalidUser);
         }
@@ -38,7 +42,6 @@ class SignIn {
     private function check_empty_input($username, $password) {
         if(empty($username) || empty($password)) {
             array_push($this->errorArray, Constants::$emptyLoginInputs);
-            // echo 'cant be empty';
             return;
         }
     }
