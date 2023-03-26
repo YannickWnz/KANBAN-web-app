@@ -1,12 +1,15 @@
 <?php 
 
 include './config/dbh.php';
-// include './classes/getboardname.class.php';
 
-// start session if user have not visited before
-if(!isset($_SESSION['visited'])) {
-  $_SESSION['visited'] = true;
+if(!isset($_SESSION['userID']) && !isset($_SESSION['username'])) {
+  header('location: login.php');
 }
+
+$userID = $_SESSION['userID'];
+$username = $_SESSION['username'];
+
+
 
 ?>
 
@@ -49,7 +52,10 @@ if(!isset($_SESSION['visited'])) {
         </div>
       </div>
       <div class="sidebar-bottom-contents">
-        <div class="mode-switch"></div>
+        <div class="mode-switch">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <a href="logout.php">Logout</a>
+        </div>
         <p class="hideSidebar">
           <i class="fa-solid fa-eye-slash"></i>
           Hide Sidebar
@@ -85,7 +91,6 @@ if(!isset($_SESSION['visited'])) {
           <!-- add new board modal pop up START -->
           <div class="addNewBoard"></div>
           <form id="addBoardForm" method="POST" onsubmit="return handleNewBoard()">
-          <!-- <form method="" action="" id="addBoardForm"> -->
             <p>Add New Board</p>
             <div class="newBoardName">
               <label for="boardName">Board Name</label><br>
@@ -228,7 +233,6 @@ if(!isset($_SESSION['visited'])) {
           <div class="edit-board-bg-overlay display-none"></div>
           <div class="edit-board-form display-none">
             <form id="addBoardForm" class="edit-board" method="POST">
-            <!-- <form method="" action="" id="addBoardForm"> -->
               <p>Add New Board</p>
               <div class="newBoardName">
                 <label for="boardName">Board Name</label><br>
@@ -274,7 +278,6 @@ if(!isset($_SESSION['visited'])) {
                     <input type="text" autocomplete="off" name="array[]" placeholder="e.g. Make coffee">
                     <i class="fa-solid fa-xmark"></i>
                     <span class="editTaskEmptyError">Can't be empty</span>
-                    <!-- <span class="newTaskEmptyError">Can't be empty</span> -->
                   </div>
               </div>
               <div class="edit-substasks-btn" onclick="">
