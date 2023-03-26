@@ -1,18 +1,19 @@
 <?php
 
 include './config/dbh.php';
+include './classes/sanitize.class.php';
 
-$query = $con->prepare('SELECT * FROM board');
+$userID = Sanitize::sanitizeId($_SESSION['userID']);
 
+
+$query = $con->prepare('SELECT * FROM board WHERE userID = :id');
+$query->bindValue(':id', $userID);
 $query->execute();
 
 $result = $query->fetchAll();
 
-// $result = $query->fetch(PDO::FETCH_ASSOC);
-
-// echo $result['boardName'];
-
 echo json_encode($result);
+
 
 
 
