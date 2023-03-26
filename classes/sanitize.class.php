@@ -1,8 +1,6 @@
 <?php
 
 class Sanitize {
-
-    private $errorArray = array();
     
     public static function sanitizeInput($input) {
         if(strlen($input) == 0) {

@@ -10,10 +10,11 @@ class Account {
     }
 
     // insert bord name into board table
-    public function insertBoard($board, $boardUniqID) {
-        $query = $this->con->prepare('INSERT INTO board (boardName, boardUniqID) VALUES (:name, :uniqid)');
+    public function insertBoard($board, $boardUniqID, $userID) {
+        $query = $this->con->prepare('INSERT INTO board (boardName, boardUniqID, userID) VALUES (:name, :uniqid, :userID)');
         $query->bindValue(':name', $board);
         $query->bindValue(':uniqid', $boardUniqID);
+        $query->bindValue(':userID', $userID);
         $query->execute();
         if($query) {
             echo "Board successfully added";
@@ -37,19 +38,8 @@ class Account {
         }
     }
 
-    // public function insertTasks($boardId, $taskTitle, $taskDescription, $taskStatus, $taskUniqID) {
-    //     $query = $this->con->prepare('INSERT INTO tasks (taskTitle, taskDescription, taskStatus, taskUniqID, boardID) VALUES (:title, :desc, :status, :uniq, :id)');
-    //     $query->bindValue(':title', $taskTitle);
-    //     $query->bindValue(':desc', $taskDescription);
-    //     $query->bindValue(':status', $taskStatus);
-    //     $query->bindValue(':uniq', $taskUniqID);
-    //     $query->bindValue(':id', $boardId);
-    //     $query->execute();
-    // }
-
     public function fetchTasksDataUsingBoardID($boardID) {
         $query = $this->con->prepare('SELECT * FROM task WHERE boardID = :boardID');
-        // $query = $this->con->prepare('SELECT taskTitle, taskStatus, subtaskContent FROM tasks t, subtasks s WHERE t.boardID = :boardID AND s.boardID = :boardID AND t.taskUniqID = s.taskUniqID; ');
         $query->bindValue(':boardID', $boardID);
         $query->execute();
         $results = $query->fetchAll();

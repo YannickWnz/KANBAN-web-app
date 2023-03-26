@@ -1,7 +1,6 @@
 <?php
 
 class Constants {
-
     public static $usernameTaken = 'Username already taken';
     public static $pwdValidation = 'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.';
     public static $emptyInput = 'Please fill in all fields';
