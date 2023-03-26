@@ -3,39 +3,27 @@ include './config/dbh.php';
 include './classes/sanitize.class.php';
 include 'register.class.php';
 include 'SignIn.class.php';
-// include 'register-ctr.php';
 include './classes/Constants.class.php';
-
 
 
 $registerUser = new RegisterUser($con);
 $logUserIn = new SignIn($con);
 
-// $register = new RegisterCtr($con);
-
 if(isset($_POST['register'])) {
-    // echo 'yooo';
     $username = Sanitize::sanitizeInput($_POST['username']);
     $pwd = Sanitize::sanitize_password($_POST['pwd']);
     $pwd2 = Sanitize::sanitize_password($_POST['pwd-repeat']);
     
     $registerUser->registerUser($username, $pwd, $pwd2);
-
 }
 
 if(isset($_POST['login'])) {
-    // echo "<span style='color:red'>wassup</span>";
     $username = Sanitize::sanitizeInput($_POST['login-user']);
     $pwd = Sanitize::sanitize_password($_POST['login-pwd']);
 
-    // echo $username . ' ' . $pwd;
-
     $logUserIn->signUserIn($username, $pwd);
-
-
 }
 
-// echo 'wassup';
 
 
 
@@ -58,10 +46,10 @@ if(isset($_POST['login'])) {
 </head>
 <body>
 
-    <!-- <div class="container">
+    <div class="container">
         <img src="./starter-code/assets/logo-dark.svg" alt="">
-    </div> -->
-    <div class="registration-section is-active ">
+    </div>
+    <div class="registration-section ">
         <div class="logo">
             <img src="./starter-code/assets/logo-light.svg" height="40" alt="">
         </div>
