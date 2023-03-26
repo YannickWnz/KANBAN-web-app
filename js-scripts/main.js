@@ -106,7 +106,7 @@ const handleNewBoard = () => {
 
     xhr.onload = () => {
         handle_confirmation_message(xhr.responseText) 
-        // handle_confirmation_message("working") 
+
         // call get board function to display boards and number of total board on load
         getBoard();
         getBoardNumber();
@@ -180,7 +180,6 @@ let selected_board_index = '';
 
 // active active board when board is clicked
 function handleActiveBoard() {
-    // emptyBoardContent();
     const createdBoardContents = document.querySelectorAll('.created-boards > div');
     const filledBoardWrapper = document.querySelectorAll('.filled-board-wrapper');
 
@@ -195,16 +194,10 @@ function handleActiveBoard() {
                 let getActiveBoard = document.querySelector('.active-board');
                 if(getActiveBoard) {getActiveBoard.classList.remove('active-board')}
                 content.classList.add('active-board');
-                // testing(index)
                 
                 // function enabling add new task button in header once a board is clicked
                 enableHeaderBtn();
 
-                // displayAmendBoardBox(index);
-                // toggleEditOrDeleteBoardBox(index)
-                // amendBoardBtn.addEventListener('click', () => {
-                //     amendBoardBox.classList.toggle('display-none')
-                // })
                 removeBoardBoxPointerEvent()
 
                 // call display filled-board function
@@ -358,10 +351,9 @@ const newTaskValue = () => {
         hideAddNewTaskModal()
     }
 
-    // newTaskForm.reset();
-
     // run function handling the removal of error messages from subtask input on keyup event
     removeSubstasksError();
+
     return false;
 }
 // Function handling add new task form and its inputs once it's been submitted END
@@ -1287,13 +1279,12 @@ const toggleAmendViewTaskWrapper = () => {
                         if(this.readyState == 4 && this.status == 200) {
                             let results = JSON.parse(this.responseText)
                             let boardID = results[index].boardID
-                            // console.log(boardID)
+
                             let serverDeleteRequest = new XMLHttpRequest();
                             serverDeleteRequest.open('POST', './include/deleteBoard.inc.php', true)
                             serverDeleteRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
                             serverDeleteRequest.onload = function() {
                                 if(this.status === 200 && this.readyState == 4) {
-                                    // console.log(this.responseText)
                                     handle_confirmation_message(this.responseText) 
                                     getBoard();
                                     getBoardNumber();
@@ -1343,7 +1334,6 @@ const toggleAmendViewTaskWrapper = () => {
         request_to_change_board_name.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
         request_to_change_board_name.onload = function() {
             if(this.status == 200 && this.readyState == 4) {
-                // console.log(this.responseText)
                 handle_confirmation_message(this.responseText) 
 
                 getBoard();
@@ -1416,7 +1406,7 @@ const toggleAmendViewTaskWrapper = () => {
         delete_task_request.open('GET', './include/deleteTask.inc.php?taskID='+selected_task_id, true)
         delete_task_request.onload = function() {
             if(this.status == 200 && this.readyState == 4) {
-                // console.log(this.responseText)
+
                 handle_confirmation_message(this.responseText) 
                 
                 fetchTaskData(selected_board_index)
@@ -1765,9 +1755,6 @@ const toggleAmendViewTaskWrapper = () => {
         }
     }
 
-
-
-    // const confirmation_msg_timing = setTimeout(hide_confirmation_message, 5000)
 
     // handling confirmation message SCRIPT END
 

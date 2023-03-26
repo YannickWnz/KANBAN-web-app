@@ -13,8 +13,6 @@
             login_btn.style.color = 'var(--mediumGrey)'
         }
     }
-
-    console.log('hello from javascript')
     
     function set_login_section_to_active() {
         if(login_section.classList.contains('display-none')) {
@@ -28,6 +26,7 @@
 
         window.onload = function() {
             const transition_el = document.querySelector('.registration-section')
+            const animation_container = document.querySelector('.container')
 
             if(localStorage.getItem("active-section") == 'register-section') {
 
@@ -39,10 +38,18 @@
 
             }
 
-            setTimeout(() => {
-                // transition_el.classList.add("is-active");
-            }, 3000)
+            if(localStorage.getItem('page-activated') == 'is-active' ) {
+                transition_el.classList.add('is-active')
+                transition_el.style.transition = '0s'
+            } else {
+                setTimeout(() => {
+                    transition_el.classList.add("is-active");
+                    localStorage.setItem('page-activated', 'is-active')
+                }, 3000)
+            }
+
         }
+
 
         const display_register_section = () => {
             
