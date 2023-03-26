@@ -14,8 +14,6 @@ $completedSubtasks = trim(json_encode($data['myarr']));
 $taskID = Sanitize::sanitizeId($data['taskID']);
 
 $updateSuccess = $insert->updateCompletedSubtasks($taskID, $completedSubtasks);
-if($updateSuccess) {
-    echo "Subtasks updated successfully";
-}
+
 
 

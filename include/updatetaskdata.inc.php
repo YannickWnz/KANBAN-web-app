@@ -5,10 +5,6 @@ include '../classes/Account.class.php';
 
 $insert = new Account($con);
 
-// check 
-
-// $user = $_SESSION['visited'];
-
 // get data from js file
 $jsonReqUrl = "php://input";
 $reqjson = file_get_contents($jsonReqUrl);
@@ -38,7 +34,6 @@ if(strlen($substask2) == 0 && strlen($substask3) == 0){
 // turn array into json format
 $subtasks = json_encode($sub);
 $completeSubtask = json_encode($completedSub);
-// echo $subtasks . ' ' . $completeSubtask;
 
 $insert->updateTaskData($taskID, $taskTitle, $taskDescription, $subtasks, $completeSubtask, $taskStatus);
 

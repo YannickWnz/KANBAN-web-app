@@ -6,8 +6,12 @@ include '../classes/Account.class.php';
 
 $insert = new Account($con);
 
+$userID = $_SESSION['userID'];
+
 // check 
 // $user = $_SESSION['visited'];
+$userID = Sanitize::sanitizeId($_SESSION['userID']);
+$username = Sanitize::sanitizeInput($_SESSION['username']);
 
 // get data from js file
 $jsonReqUrl = "php://input";
@@ -24,7 +28,7 @@ $boardUniqID = uniqid();
 // echo $boardName;
 
 // send board name to account class file
-$insert->insertBoard($boardName, $boardUniqID);
+$insert->insertBoard($boardName, $boardUniqID, $userID);
 
 
 
